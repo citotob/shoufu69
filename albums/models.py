@@ -4,67 +4,177 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+import datetime
 
 # Create your models here.
-class video(models.Model):
+class AlbumCategory(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    featuredesc = models.TextField(blank=True)
-    keyword = models.TextField(blank=True)
-    channel = models.CharField(max_length=255, default='1')
-    vdoname = models.CharField(max_length=40, blank=True)
-    flvdoname = models.CharField(max_length=40, blank=True)
-    formats = models.CharField(max_length=500, blank=True)
-    lformats = models.CharField(max_length=500, blank=True)
-    duration = models.FloatField(null=True)
-    space = models.BigIntegerField(default=0)
-    type = models.CharField(max_length=7, blank=True)
-    addtime = models.CharField(max_length=20, blank=True)
-    adddate = models.DateField(default='0000-00-00')
-    recorddate = models.DateField(default='0000-00-00')
-    location = models.TextField(blank=True)
-    country = models.CharField(max_length=120, blank=True)
-    vkey = models.CharField(max_length=20, blank=True)
-    viewnumber = models.BigIntegerField(default=0)
-    viewtime = models.DateTimeField(default='0000-00-00 00:00:00')
-    com_num = models.IntegerField(default=0)
-    fav_num = models.IntegerField(default=0)
-    download_num = models.BigIntegerField(default=0)
-    featured = models.CharField(max_length=3, blank=True)
-    ratedby = models.BigIntegerField(default=0)
-    rate = models.FloatField(default=0)
-    filehome = models.CharField(max_length=120, blank=True)
-    be_comment = models.CharField(max_length=3, blank=True)
-    be_rated = models.CharField(max_length=3, blank=True)
-    embed = models.CharField(max_length=8, default='enabled')
-    embed_code = models.TextField(blank=True)
-    thumb = models.SmallIntegerField(default=1)
-    thumbs = models.SmallIntegerField(default=20)
-    voter_id = models.CharField(max_length=200, blank=True)
-    server = models.CharField(max_length=255, blank=True)
-    active = models.CharField(max_length=1, blank=True)
-    hd_filename = models.CharField(max_length=20, blank=True)
-    ipod_filename = models.CharField(max_length=20, blank=True)
-    aspect_hd = models.CharField(max_length=10, default='0')
-    width_hd = models.IntegerField(default=0)
-    height_hd = models.IntegerField(default=0)
-    aspect_sd = models.CharField(max_length=10, default='0')
-    width_sd = models.IntegerField(default=0)
-    height_sd = models.IntegerField(default=0)
-    iphone = models.IntegerField(default=0)
-    hd = models.IntegerField(default=0)
-    likes = models.BigIntegerField(default=0)
-    dislikes = models.BigIntegerField(default=0)
+    name = models.CharField(_('Name'),max_length=150, default='')
+    slug = models.CharField(_('Slug'), max_length=120, default='')
+    thumb = models.ImageField(default = 'no-img.jpg')
 
-class video_comments(models.Model):
-    vid = models.ForeignKey(video, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'AlbumCategory'
+        verbose_name_plural = 'AlbumCategories'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return ''
+
+class Album(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment = models.TextField(blank=True)
-    addtime = models.BigIntegerField(default=0)
-    STATUS_ = (
-        ('0','0'),
-        ('1','1')
+    name = models.CharField(_('Name'), max_length=255, default='')
+    tags =  models.TextField(_('Tags'), blank=True)
+    category = models.ForeignKey(AlbumCategory, on_delete=models.CASCADE)
+    total_photos = models.BigIntegerField(_('Total photos'),default=0)
+    total_views = models.BigIntegerField(_('Total Views'),default=0)
+    TYPE = (
+        ('1','Public'),
+        ('0','Private')
     )
-    status = models.CharField(max_length=1, choices=STATUS_,default='1')
-    
+    type = models.CharField(_('Type'),max_length=1, choices=TYPE,default='1')
+    addtime = models.BigIntegerField(_('Addtime'),default=0)
+    STATUS = (
+        ('0','Suspended'),
+        ('1','Active')
+    )
+    status = models.CharField(_('Status'),max_length=1, choices=STATUS,default='1')
+    adddate = models.DateField(_('Adddate'),default=datetime.date.today)
+    rate = models.FloatField(_('Rate'),default=0)
+    ratedby = models.BigIntegerField(_('Ratedby'),default=0)
+    total_comments = models.BigIntegerField(_('Total Comments'),default=0)
+    total_favorites = models.BigIntegerField(_('Total Favorites'),default=0)
+    likes = models.BigIntegerField(_('Likes'),default=0)
+    dislikes = models.BigIntegerField(_('Dislikes'),default=0)
+
+    class Meta:
+        verbose_name = 'Album'
+        verbose_name_plural = 'Albums'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return ''
+
+class Photo(models.Model):
+    aid = models.ForeignKey(Album, on_delete=models.CASCADE)
+    caption = models.CharField(_('Caption'),max_length=100, default='')
+    total_views = models.BigIntegerField(_('Total Views'),default=0)
+    total_comments = models.BigIntegerField(_('Total Comments'),default=0)
+    STATUS = (
+        ('0','Suspended'),
+        ('1','Active')
+    )
+    status = models.CharField(_('Status'),max_length=1, choices=STATUS,default='1')
+    rate = models.FloatField(_('Rate'),default=0)
+    ratedby = models.BigIntegerField(_('Ratedby'),default=0)
+    total_favorites = models.BigIntegerField(_('Total Favorites'),default=0)
+    TYPE = (
+        ('1','Public'),
+        ('0','Private')
+    )
+    type = models.CharField(_('Type'),max_length=1, choices=TYPE,default='1')
+    likes = models.BigIntegerField(_('Likes'),default=0)
+    dislikes = models.BigIntegerField(_('Dislikes'),default=0)
+
+    class Meta:
+        verbose_name = 'Photo'
+        verbose_name_plural = 'Photos'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.caption
+
+    def get_absolute_url(self):
+        return ''
+
+class PhotoComment(models.Model):
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.TextField(_('Comment'),blank=True)
+    addtime = models.BigIntegerField(_('Addtime'),default=0)
+    STATUS_ = (
+        ('0','Suspended'),
+        ('1','Active')
+    )
+    status = models.CharField(_('Status'),max_length=1, choices=STATUS_,default='1')
+
+    class Meta:
+        verbose_name = 'PhotoComment'
+        verbose_name_plural = 'PhotoComments'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.comment
+
+    def get_absolute_url(self):
+        return ''
+
+class PhotoFavorite(models.Model):
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'PhotoFavorite'
+        verbose_name_plural = 'PhotoFavorite'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.pid
+
+    def get_absolute_url(self):
+        return ''
+
+class PhotoFlag(models.Model):
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reason = models.CharField(_('Reason'),max_length=15, default='')
+    message = models.TextField(_('Message'),blank=True)
+    add_date = models.DateField(_('Add Date'),default=datetime.date.today)
+
+    class Meta:
+        verbose_name = 'PhotoFlag'
+        verbose_name_plural = 'PhotoFlags'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.reason
+
+    def get_absolute_url(self):
+        return ''
+
+class PhotoRatingId(models.Model):
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'PhotoRatingId'
+        verbose_name_plural = 'PhotoRatingId'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.pid
+
+    def get_absolute_url(self):
+        return ''
+
+class PhotoRatingIp(models.Model):
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    ip = models.IntegerField(_('IP'),default=0)
+
+    class Meta:
+        verbose_name = 'PhotoRatingIp'
+        verbose_name_plural = 'PhotoRatingIp'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.ip
+
+    def get_absolute_url(self):
+        return ''

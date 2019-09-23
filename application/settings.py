@@ -65,7 +65,10 @@ INSTALLED_APPS = (
     'people',
     'menu',
     'videos',
-    #'albums',
+    'albums',
+    'stories',
+    'notices',
+    'defang',
 )
 #MIDDLEWARE = (
 #    'django.middleware.security.SecurityMiddleware',
@@ -160,10 +163,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+#STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static', 'media')
+#MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+#print(MEDIA_ROOT)
 
 # Logging
 
@@ -260,7 +266,8 @@ JET_APP_INDEX_DASHBOARD = 'dashboard.CustomAppIndexDashboard'
 
 JET_MODULE_YANDEX_METRIKA_CLIENT_ID = '46de85bff0f94c82bbf42be177f128a2'
 JET_MODULE_YANDEX_METRIKA_CLIENT_SECRET = '01107ac1049b49ab9b24e60e95ba2a93'
-JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(PROJECT_DIR, 'client_secrets.json')
+#JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(PROJECT_DIR, 'client_secrets.json')
+JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(BASE_DIR, 'client_secrets.json')
 
 # CKEditor
 

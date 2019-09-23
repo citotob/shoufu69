@@ -7,12 +7,33 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import datetime
+import os
 
 # Create your models here.
 @python_2_unicode_compatible
+class VideoCategory(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(_('Name'),max_length=150, default='')
+    slug = models.CharField(_('Slug'), max_length=120, default='')
+    #thumb = models.ImageField(upload_to = 'pictures/', default = 'pictures/None/no-img.jpg')
+    thumb = models.ImageField(default = 'no-img.jpg')
+
+    class Meta:
+        verbose_name = 'VideoCategory'
+        verbose_name_plural = 'VideoCategories'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return ''
+
+@python_2_unicode_compatible
 class Video(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(_('title'), max_length=191)
+    category = models.ForeignKey(VideoCategory, on_delete=models.CASCADE)
+    title = models.CharField(_('Title'), max_length=191)
     description = models.TextField(_('description'),blank=True)
     featuredesc = models.TextField(_('featuredesc'), blank=True)
     keyword = models.TextField(_('keyword'),blank=True)
@@ -23,7 +44,11 @@ class Video(models.Model):
     lformats = models.CharField(_('lformats'),max_length=191, blank=True)
     duration = models.FloatField(_('duration'),null=True)
     space = models.BigIntegerField(_('space'),default=0)
-    type = models.CharField(_('type'),max_length=7, blank=True)
+    TYPE = (
+        ('1','Public'),
+        ('0','Private')
+    )
+    type = models.CharField(_('type'),max_length=1, choices=TYPE,default='1')
     addtime = models.CharField(_('addtime'),max_length=20, blank=True)
     adddate = models.DateField(_('adddate'),default=datetime.date.today)
     recorddate = models.DateField(_('recorddate'),default=datetime.date.today)
@@ -42,7 +67,7 @@ class Video(models.Model):
     be_comment = models.CharField(_('be_comment'),max_length=3, blank=True)
     be_rated = models.CharField(_('be_rated'),max_length=3, blank=True)
     embed = models.CharField(_('embed'),max_length=8, default='enabled')
-    embed_code = models.TextField(_('embed_code'),blank=True)
+    embed_code = models.TextField(_('Embed Code'),blank=True)
     thumb = models.SmallIntegerField(_('thumb'),default=1)
     thumbs = models.SmallIntegerField(_('thumbs'),default=20)
     voter_id = models.CharField(_('voter_id'),max_length=191, blank=True)
@@ -60,6 +85,10 @@ class Video(models.Model):
     hd = models.IntegerField(_('hd'),default=0)
     likes = models.BigIntegerField(_('likes'),default=0)
     dislikes = models.BigIntegerField(_('dislikes'),default=0)
+    thumb = models.ImageField(_('Thumbnails'), upload_to='images/%Y/%m/%d', default = 'no-img.jpg')
+
+    def get_absolute_image_url(self):
+        return os.path.join(settings.MEDIA_URL, self.thumb.url)
 
     class Meta:
         verbose_name = 'Video'
@@ -69,8 +98,8 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return ''
+    #def get_absolute_url(self):
+    #    return ''    
 
 class VideoComment(models.Model):
     vid = models.ForeignKey(Video, on_delete=models.CASCADE)
@@ -90,6 +119,69 @@ class VideoComment(models.Model):
 
     def __str__(self):
         return self.comment
+
+    def get_absolute_url(self):
+        return ''
+
+class VideoFlag(models.Model):
+    vid = models.ForeignKey(Video, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reason = models.CharField(_('Reason'),max_length=15, default='')
+    message = models.TextField(_('Message'),blank=True)
+    add_date = models.DateField(_('Add Date'),default=datetime.date.today)
+
+    class Meta:
+        verbose_name = 'VideoFlag'
+        verbose_name_plural = 'VideoFlags'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.reason
+
+    def get_absolute_url(self):
+        return ''
+
+class VideoSubscribe(models.Model):
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    subscribe_date = models.DateField(_('Subscribe Date'),default=datetime.date.today)
+
+    class Meta:
+        verbose_name = 'VideoSubscribe'
+        verbose_name_plural = 'VideoSubscribes'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.subscribe_date
+
+    def get_absolute_url(self):
+        return ''
+
+class VideoVoteIp(models.Model):
+    vid = models.ForeignKey(Video, on_delete=models.CASCADE)
+    ip =  models.IntegerField(_('IP'),default=0)
+
+    class Meta:
+        verbose_name = 'VideoVoteIp'
+        verbose_name_plural = 'VideoVoteIps'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.ip
+
+    def get_absolute_url(self):
+        return ''
+
+class VideoVoteUser(models.Model):
+    vid = models.ForeignKey(Video, on_delete=models.CASCADE)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'VideoVoteUser'
+        verbose_name_plural = 'VideoVoteUsers'
+        #unique_together = ('name', 'state', 'county')
+
+    def __str__(self):
+        return self.uid
 
     def get_absolute_url(self):
         return ''
