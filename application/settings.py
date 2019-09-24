@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adminsortable2',
+    'accounts',
     'mptt',
     'ckeditor',
     'tinymce',

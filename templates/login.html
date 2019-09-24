@@ -55,12 +55,14 @@
                      <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
                         <div class="form-group">
                             {{ form.username.errors }}
-                            {{ form.username.label_tag }} {{ form.username }}
+                            {{ form.username.label_tag }} 
+                            <input type="text" class="form-control" name="{{ form.username.name }}" placeholder="Username" value="">
                         </div>
                         <div class="form-group">
                             {{ form.password.errors }}
-                            {{ form.password.label_tag }} {{ form.password }}
-                            <input type="hidden" name="next" value="{% url 'home' %}"" />
+                            {{ form.password.label_tag }} 
+                            <input type="password" class="form-control" name="{{ form.password.name }}" placeholder="Password">
+                            <input type="hidden" name="next" value="{% url 'home' %}" />
                         </div>
                         {% url 'admin_password_reset' as password_reset_url %}
                         {% if password_reset_url %}
@@ -71,7 +73,7 @@
                         <div class="mt-4">
                            <div class="row">
                               <div class="col-12">
-                                 {% comment %} <button type="submit" class="btn btn-outline-primary btn-block btn-lg">Sign In</button> {% endcomment %}
+                                 
                                  <input type="submit" class="btn btn-outline-primary btn-block btn-lg" value="{% trans 'Log in' %}" />
                               </div>
                            </div>
@@ -124,9 +126,11 @@
       <script src={% static 'assets/vendor/owl-carousel/owl.carousel.js' %}></script>
       <!-- Custom scripts for all pages-->
       <script src={% static 'assets/js/custom.js' %}></script>
-<script type="text/javascript">
-document.getElementById('id_username').focus()
-</script>
+
+      <script type="text/javascript">
+      document.getElementById('id_username').focus()
+      </script>
+      
 </div>
    </body>
 </html>
