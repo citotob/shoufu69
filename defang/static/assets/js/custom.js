@@ -91,4 +91,15 @@ Version: 1.0
     event.preventDefault();
   });
 
+  $('#add-picture').click(function(){
+    var count = $("#picture-form-group > .form-group").length;
+    var picNum = count + 1;
+    var picElem = '<div class="form-group"><label for="pic'+picNum+'">Choose Picture</label><input type="file" class="form-control-file" id="pic'+picNum+'"></div>';
+    if (count < 10 ) {
+      $('#picture-form-group').append(picElem);
+    } else {
+      $('#add-picture').hide();
+    }
+  })
+
 })(jQuery); // End of use strict
