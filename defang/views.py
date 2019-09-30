@@ -21,3 +21,13 @@ def signin(request):
 #       return redirect('/admin/')
 #    else:
 #       return render(request, 'index.html',{})
+
+def upload(request):
+    return render(request,'upload.html')
+
+def upload_video(request):
+    return render(request,'upload-video.html')
+
+def upload_picture(request):
+    return render(request,'upload-picture.html')
+

@@ -46,6 +46,11 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
 
+    path('upload/', views.upload, name = 'upload'),
+    path('upload-video/', views.upload_video, name = 'upload-video'),
+    path('upload-picture/', views.upload_picture, name = 'upload-picture'),
+
+
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
 # Add media and static files

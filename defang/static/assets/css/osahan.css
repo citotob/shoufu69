@@ -697,20 +697,23 @@ Version: 1.0
     color: #888888 !important;
     text-decoration: none;
 }
- .form-control, .form-control:focus {
-    background: #1c1c1c none repeat scroll 0 0;
+.form-control, .form-control:focus {
+    background: #383636 none repeat scroll 0 0;
     border-color: #303030;
      border-radius: 2px;
      font-size: 13px;
+     color: white;
 }
 .form-control:disabled, .form-control[readonly] {
     background-color: #121212;
 }
  .custom-select{
-     background-color: #1c1c1c;
+     background-color: #383636;
      border-color: #303030;
      border-radius: 2px;
      font-size: 13px;
+     color: white;
+
 }
  .custom-checkbox .custom-control-label::before {
      border-radius: 2px;
@@ -1070,6 +1073,27 @@ Version: 1.0
      font-size: 12px;
      opacity: 0.7;
 }
+
+.btn-outline-picture {
+    border-color: #ffc34a;
+    color: #ffc34a;
+}
+
+.btn-outline-picture:hover {
+    border-color: transparent !important;
+    background: #ffc34a;
+    background: -moz-linear-gradient(-45deg, #ffc34a 0%, #ffc34a 100%);
+    background: -webkit-linear-gradient(-45deg, #ffc34a 0%,#ffc34a 100%);
+    background: linear-gradient(135deg, #ffc34a 0%,#ffc34a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff0000', endColorstr='#e41e1d',GradientType=1 );
+    color: white;
+}
+
+.fas.text-picture {
+    color: #ffc34a!important;
+}
+
+
 /* Watch History */
  .video-close {
      color: #fff !important;
