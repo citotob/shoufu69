@@ -106,13 +106,9 @@ Version: 1.0
 
   // aspect ratio video thumbnail
   function resize_thumbs(){
-    console.log('resizing');
     var wd = $('.video-card-body').width();
     var hg = (wd / 16) * 9;
     $('.video-card-image img').height(hg)
-    console.log(wd);
-    console.log(hg);
-
   }
   
   resize_thumbs();
