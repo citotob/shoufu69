@@ -857,6 +857,8 @@ Version: 1.0
 }
 .video-card-image img {
     width: 100%;
+    object-fit: cover;
+    object-position: 0% 20%;
 }
  .play-icon {
      opacity: 0;
