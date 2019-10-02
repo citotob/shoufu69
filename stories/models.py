@@ -7,6 +7,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import datetime
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 @python_2_unicode_compatible
@@ -32,7 +33,7 @@ class Story(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(StoryCategory, on_delete=models.CASCADE)
     title = models.CharField(_('Title'), max_length=255, default='')
-    content = models.TextField(_('Content'),blank=True)
+    content = RichTextField()
     total_views = models.BigIntegerField(_('Total Views'),default=0)
     total_comments = models.BigIntegerField(_('Total Comments'),default=0)
     total_links = models.BigIntegerField(_('Total Links'),default=0)

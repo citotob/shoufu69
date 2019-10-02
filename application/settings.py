@@ -274,3 +274,10 @@ JET_MODULE_GOOGLE_ANALYTICS_CLIENT_SECRETS_FILE = os.path.join(BASE_DIR, 'client
 # CKEditor
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'height': 'auto',
+        'width': 'auto',
+    },
+}

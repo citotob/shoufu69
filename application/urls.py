@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from albums.views import upload_picture
+from stories.views import create_story
 
 from django.contrib.auth import views as auth_views
 from accounts.views import logout, SignUp, UpdateProfile, profile
@@ -16,7 +17,6 @@ admin.autodiscover()
 urlpatterns = [
     #path('videos/', include('videos.urls', 'videos')),
     path('', views.home, name='home'),
-    path('signin/', views.signin, name='signin'),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     #url(r'^admin/', include(admin.site.urls)),
@@ -50,6 +50,9 @@ urlpatterns = [
     path('upload/', views.upload, name = 'upload'),
     path('upload-video/', views.upload_video, name = 'upload-video'),
     path('upload-picture/', upload_picture, name = 'upload-picture'),
+
+    path('create-story/', create_story, name='create-story'),
+
 
 
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
