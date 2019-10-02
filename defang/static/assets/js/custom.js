@@ -91,12 +91,14 @@ Version: 1.0
     event.preventDefault();
   });
 
+  // 'add another picture' button
   $('#add-picture').click(function(){
     var count = $("#picture-form-group > .form-group").length;
     var picNum = count + 1;
-    var picElem = '<div class="form-group"><label for="pic'+picNum+'">Choose Picture</label><input type="file" class="form-control-file" id="pic'+picNum+'"></div>';
+    var picElem = '<div class="form-group"><label for="pic_'+picNum+'">Choose Picture</label><input type="file" class="form-control-file" id="pic_'+picNum+'" name="pic_'+picNum+'"><label class="mt-2" for="pic_cap_'+picNum+'">Caption</label><input type="text" placeholder="caption for this picture" id="pic_cap_'+picNum+'" name="pic_cap_'+picNum+'" class="form-control"> </div>';
     if (count < 10 ) {
       $('#picture-form-group').append(picElem);
+      $('#sum_pic').val(picNum);
     } else {
       $('#add-picture').hide();
     }

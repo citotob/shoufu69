@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from albums.views import upload_picture
 
 from django.contrib.auth import views as auth_views
 from accounts.views import logout, SignUp, UpdateProfile, profile
@@ -48,7 +49,7 @@ urlpatterns = [
 
     path('upload/', views.upload, name = 'upload'),
     path('upload-video/', views.upload_video, name = 'upload-video'),
-    path('upload-picture/', views.upload_picture, name = 'upload-picture'),
+    path('upload-picture/', upload_picture, name = 'upload-picture'),
 
 
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
