@@ -116,4 +116,33 @@ Version: 1.0
     resize_thumbs();
   });
 
+  // thumbnail animation
+  var timer,
+  count = 0,
+  cycle = function(el, root){
+    count = (count+1)%21;
+    var img_url = window.location.origin + root + '_' + count + '.jpg';
+    $.get(img_url)
+      .done(function() { 
+        // console.log('berhasil');
+        el.attr('src', root + '_' + ((count==0) ? '1' : count) + '.jpg');
+      }).fail(function() { 
+        // console.log('gagal');
+        count = 0;
+        el.attr('src', root + '_1.jpg')
+      })
+  };
+  $('.video-card').hover(function(){
+    var gambar = $('img', this);
+    var thumbDefault = gambar.attr('thumb-default');
+    var root = thumbDefault.replace('_1.jpg','');
+    cycle(gambar, root);
+    timer = setInterval(function(){ cycle(gambar, root); }, 150);
+  }, function(){
+    clearInterval(timer);
+    var gambar = $('img', this);
+    var thumbDefault = gambar.attr('thumb-default');
+    gambar.attr('src', thumbDefault);
+  });
+
 })(jQuery); // End of use strict
