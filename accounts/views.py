@@ -31,11 +31,15 @@ class UpdateProfile(generic.UpdateView):
 def profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
-        if form.is_valid :
+        #form.is_superuser =  False
+        #form.is_staff = False
+        #form.is_active = True
+        if form.is_valid() :
             form.save()
+            #print("Profile Succeed")
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
-        
+        #print("Profile Failed")
     else :
         form = UserUpdateForm(instance=request.user)
     

@@ -43,7 +43,8 @@ class Album(models.Model):
         ('1','Active')
     )
     status = models.CharField(_('Status'),max_length=1, choices=STATUS,default='1')
-    adddate = models.DateField(_('Adddate'),default=timezone.now)
+    #adddate = models.DateField(_('Adddate'),default=timezone.now)
+    adddate = models.DateTimeField(_('Add Date'),auto_now_add=True)
     rate = models.FloatField(_('Rate'),default=0)
     ratedby = models.BigIntegerField(_('Ratedby'),default=0)
     total_comments = models.BigIntegerField(_('Total Comments'),default=0)
@@ -64,7 +65,7 @@ class Album(models.Model):
 
 class Photo(models.Model):
     aid = models.ForeignKey(Album, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to = 'photo/%Y/%m/%d')
+    image = models.ImageField(upload_to = 'photo/%Y/%m/%d', default = 'no-img.jpg')
     caption = models.CharField(_('Caption'),max_length=100, default='')
     total_views = models.BigIntegerField(_('Total Views'),default=0)
     total_comments = models.BigIntegerField(_('Total Comments'),default=0)

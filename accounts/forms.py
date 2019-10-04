@@ -10,3 +10,8 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username','email', 'first_name', 'last_name']
 
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+

@@ -4,9 +4,19 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse
+from .models import Album, AlbumCategory, Photo
+from django.db import connection
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the videos index.")
+def albums(request):
+    #albums = Album.objects.all().order_by('-adddate')
+    #albums = Album.objects.all().prefetch_related('id')
+    with connection.cursor() as cursor:
+        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
+        row = cursor.fetchall()
+
+    albums = row
+    context = {'albums' : albums}
+    return render(request, 'albums.html', context)
 
 
 def upload_picture(request):

@@ -33,17 +33,20 @@ class Story(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(StoryCategory, on_delete=models.CASCADE)
     title = models.CharField(_('Title'), max_length=255, default='')
-    content = RichTextField()
+    #content = models.TextField(_('Content'),blank=True)
+    content = RichTextField(_('Content'))
     total_views = models.BigIntegerField(_('Total Views'),default=0)
     total_comments = models.BigIntegerField(_('Total Comments'),default=0)
     total_links = models.BigIntegerField(_('Total Links'),default=0)
     addtime = models.BigIntegerField(_('Add time'),default=0)
-    adddate = models.DateField(_('Add date'),default=datetime.date.today)
+    #adddate = models.DateField(_('Add date'),default=datetime.date.today)
+    adddate = models.DateTimeField(_('Add Time'),auto_now_add=True)
     STATUS_ = (
-        ('0','0'),
-        ('1','1')
+        ('0','Suspended'),
+        ('1','Active')
     )
     status = models.CharField(_('Status'),max_length=1, choices=STATUS_,default='1')
+    thumb = models.ImageField(_('Thumbnails'), upload_to='thumbstories/%Y/%m/%d', default = 'no-img.jpg')
 
     class Meta:
         verbose_name = 'Story'

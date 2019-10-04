@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <form class="osahan-form" method="post">
+                <form class="osahan-form" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ story_form.media }}
                     <div class="row">
@@ -32,6 +32,16 @@
                                 <input type="text" placeholder="" id="title" name="title" class="form-control">
                             </div>
                         </div>
+
+                        <div class="col-lg-12">
+                            <div id="picture-form-group">
+                                <div class="form-group">
+                                    <label for="pic_1">Choose Picture</label>                            
+                                    <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" required>
+                                </div>
+                            </div>
+                        </div>
+
                         
                         <div class="col-lg-6">
                             <div class="form-group">

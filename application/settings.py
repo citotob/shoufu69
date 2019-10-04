@@ -42,8 +42,8 @@ DEBUG = config.getboolean('common', 'debug')
 
 ALLOWED_HOSTS = ['*']
 
-LOGIN_REDIRECT_URL = '/'
-
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 # Application definition
 
 INSTALLED_APPS = (
@@ -54,7 +54,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'adminsortable2',
-    'accounts',
     'mptt',
     'ckeditor',
     'tinymce',
@@ -71,6 +70,8 @@ INSTALLED_APPS = (
     'stories',
     'notices',
     'defang',
+    'accounts',
+    #'session_security',
 )
 #MIDDLEWARE = (
 #    'django.middleware.security.SecurityMiddleware',
@@ -91,7 +92,8 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'session_security.middleware.SessionSecurityMiddleware',
 )
 
 TEMPLATES = [
@@ -113,6 +115,14 @@ TEMPLATES = [
         },
     },
 ]
+
+#SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+#SESSION_SECURITY_EXPIRE_AFTER=1800
+#SESSION_SECURITY_WARN_AFTER=1740
+
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+#SESSION_COOKIE_AGE = 180 # set just 10 seconds to test
+#SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = 'application.urls'
 
@@ -146,6 +156,11 @@ DATABASES = {
         #'use_unicode' : True,
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

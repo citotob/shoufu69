@@ -33,6 +33,7 @@ class VideoCategory(models.Model):
 class Video(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(VideoCategory, on_delete=models.CASCADE)
+    video_id = models.IntegerField(_('Video ID'),default=0)
     title = models.CharField(_('Title'), max_length=191)
     description = models.TextField(_('description'),blank=True)
     featuredesc = models.TextField(_('featuredesc'), blank=True)
@@ -50,7 +51,8 @@ class Video(models.Model):
     )
     type = models.CharField(_('type'),max_length=1, choices=TYPE,default='1')
     addtime = models.CharField(_('addtime'),max_length=20, blank=True)
-    adddate = models.DateField(_('adddate'),default=datetime.date.today)
+    #adddate = models.DateField(_('adddate'),default=datetime.date.today)
+    adddate = models.DateTimeField(_('Add Time'),auto_now_add=True)
     recorddate = models.DateField(_('recorddate'),default=datetime.date.today)
     location = models.TextField(_('location'),blank=True)
     country = models.CharField(_('country'),max_length=120, blank=True)
@@ -68,7 +70,7 @@ class Video(models.Model):
     be_rated = models.CharField(_('be_rated'),max_length=3, blank=True)
     embed = models.CharField(_('embed'),max_length=8, default='enabled')
     embed_code = models.TextField(_('Embed Code'),blank=True)
-    thumb = models.SmallIntegerField(_('thumb'),default=1)
+    #thumb = models.SmallIntegerField(_('thumb'),default=1)
     thumbs = models.SmallIntegerField(_('thumbs'),default=20)
     voter_id = models.CharField(_('voter_id'),max_length=191, blank=True)
     server = models.CharField(_('server'),max_length=191, blank=True)
@@ -85,10 +87,13 @@ class Video(models.Model):
     hd = models.IntegerField(_('hd'),default=0)
     likes = models.BigIntegerField(_('likes'),default=0)
     dislikes = models.BigIntegerField(_('dislikes'),default=0)
-    thumb = models.ImageField(_('Thumbnails'), upload_to='images/%Y/%m/%d', default = 'no-img.jpg')
+    thumb = models.ImageField(_('Thumbnails'), upload_to='thumbnails/%Y/%m/%d', default = 'no-img.jpg')
+    thumb_url = models.CharField(_('Thumb URL'),max_length=200, default='/')
+    videofile = models.FileField(upload_to='videos/%Y/%m/%d', null=True, verbose_name="")
+    tags =  models.TextField(_('Tags'), blank=True)
 
     def get_absolute_image_url(self):
-        return os.path.join(settings.MEDIA_URL, self.thumb.url)
+        return os.path.join(settings.MEDIA_URL, self.thumb)
 
     class Meta:
         verbose_name = 'Video'
@@ -122,6 +127,10 @@ class VideoComment(models.Model):
 
     def get_absolute_url(self):
         return ''
+
+class VideoThumbnails(models.Model):
+    vid = models.ForeignKey(Video, on_delete=models.CASCADE)
+    thumb = models.ImageField(_('Thumbnails'), upload_to='thumbnails/%Y/%m/%d', default = 'no-img.jpg')
 
 class VideoFlag(models.Model):
     vid = models.ForeignKey(Video, on_delete=models.CASCADE)

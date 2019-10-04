@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_site.html' %}
 {% load static %}
 
 {% block content %}
@@ -13,14 +13,14 @@
             </div>
         </div>
 
-        <form action method="POST">
+        <form action method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
+        {{ form.errors }}
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="control-label"> {{form.username.label}} <span class="required">*</span></label>
-                    <input class="form-control border-form-control" name="{{ form.username.name }}" value="{{ form.username.value }}" id="id_{{ form.username.name }}" placeholder="{{ form.username.name }}" type="text">
+                    <input class="form-control border-form-control" name="{{ form.username.name }}" value="{{ form.username.value }}" id="id_{{ form.username.name }}" placeholder="{{ form.username.name }}" type="text" readonly>
                 </div>
             </div>
             <div class="col-sm-6">

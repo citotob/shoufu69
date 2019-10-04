@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_site.html" %}
 {% load static %}
 {% block content %}
 
@@ -18,45 +18,41 @@
                     </div>
                 </div>
 
-                <form class="osahan-form">
-
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="e1">Video Title</label>
-                                <input type="text" placeholder="Set your video title." id="e1" class="form-control">
+                                <input type="text" placeholder="Set your video title." id="title" name="title" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="e2">Description</label>
-                                <textarea rows="3" id="e2" name="e2" class="form-control" placeholder="Set your description"></textarea>
+                                <textarea rows="3" id="description" name="description" class="form-control" placeholder="Set your description" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e7">Tags</label>
+                                <input type="text" placeholder="each tag seperate with comma" id="tags" name="tags" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" class="custom-select">
+                                    {% for v_category in vc_list %}
+                                    <option value="{{ v_category.pk }}">{{ v_category.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="video_file">Choose Video File</label>                            
-                                <input type="file" class="form-control-file" id="video_file">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="category">Category</label>
-                                <select id="category" class="custom-select">
-                                <option>kategori 1</option>
-                                <option>kategori 2</option>
-                                <option>kategori 3</option>
-                                <option>kategori 4</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="e7">Tags</label>
-                                <input type="text" placeholder="each tag seperate with comma" id="e7" class="form-control">
+                                <input type="file" class="form-control-file" name="video_file" accept="video/*" required>
                             </div>
                         </div>
                     </div>

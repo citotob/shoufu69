@@ -1,0 +1,83 @@
+{% extends "base_site.html" %}
+{% load static %}
+{% block content %}
+
+<div id="content-wrapper">
+
+    <div class="container-fluid upload-details">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-title">
+                        <h6>Upload Details (Albums)</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="osahan-form">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e1">Album Title</label>
+                                <input type="text" placeholder="Set your video title." id="e1" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e2">Description</label>
+                                <textarea rows="3" id="e2" name="e2" class="form-control" placeholder="Set your description"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" class="custom-select">
+                                <option>kategori 1</option>
+                                <option>kategori 2</option>
+                                <option>kategori 3</option>
+                                <option>kategori 4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12"> 
+                            <div class="form-group">
+                                <label for="pic1">Choose Picture</label>                            
+                                <input type="file" class="form-control-file" id="pic1">
+                            </div>
+
+                            {% comment %} <div class="form-group">
+                                <label for="pic2">Choose Picture</label>                            
+                                <input type="file" class="form-control-file" id="pic2">
+                            </div> {% endcomment %}
+
+                            <div class="form-group">                        
+                                <button class="btn btn-outline-warning">Add another picture</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="osahan-area text-right mt-3">
+                        <button class="btn btn-outline-primary">Save Album</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+{% endblock content %}
