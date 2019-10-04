@@ -1251,6 +1251,11 @@ Version: 1.0
     background-color: #1c1c1c;
 }
 
+.tag-info.list-inline a {
+    color: #e6e6e6;
+}
+
+
 /* Mobile Media */
 /* Extra small devices (portrait phones, less than 576px) */
  @media (max-width: 575.98px) {

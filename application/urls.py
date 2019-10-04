@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from albums.views import upload_picture, albums
+from albums.views import upload_picture, albums, album_photo
 from stories.views import create_story, stories
 
 from django.contrib.auth import views as auth_views
@@ -56,6 +56,8 @@ urlpatterns = [
     path('stories/', stories, name='stories'),
 
     path('albums/', albums, name='albums'),
+    path('albums/<int:aid>/show', album_photo, name='album-photo'),
+
 
 
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

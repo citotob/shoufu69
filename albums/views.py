@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from .models import Album, AlbumCategory, Photo
 from django.db import connection
 
+import random
+
 def albums(request):
     #albums = Album.objects.all().order_by('-adddate')
     #albums = Album.objects.all().prefetch_related('id')
@@ -15,9 +17,26 @@ def albums(request):
         row = cursor.fetchall()
 
     albums = row
-    context = {'albums' : albums}
+    albums_cat = AlbumCategory.objects.all()
+    context = {'albums' : albums, 'albums_cat' :  albums_cat}
     return render(request, 'albums.html', context)
 
+def album_photo(request, aid):
+
+    photos = Photo.objects.filter(aid=aid)
+    album = Album.objects.get(pk=aid)
+    albums_cat = AlbumCategory.objects.all()
+    
+
+    album_item = Album.objects.all()
+    len_album = len(album_item)
+    if len_album > 4 :
+        random_album =  random.sample(list(album_item), 5)
+    else :
+        random_album =  random.sample(list(album_item), len_album)
+
+    context = {'photos': photos, 'album' : album, 'albums_cat' : albums_cat, 'random_album' : random_album}
+    return render(request, 'album-photo.html', context)
 
 def upload_picture(request):
 
