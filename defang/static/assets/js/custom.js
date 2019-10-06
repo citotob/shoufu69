@@ -111,12 +111,22 @@ Version: 1.0
     $('.video-card-image img').height(hg)
   }
   
+  function resize_thumbs_sidebar(){
+    var wd = $('.sdb .video-card-image img').width();
+    var hg = (wd / 16) * 9;
+    console.log(wd);
+    $('.sdb .video-card-image img').height(hg);
+  }
+
   resize_thumbs();
+  resize_thumbs_sidebar()
   $(window).resize(function(){
     resize_thumbs();
+    resize_thumbs_sidebar()
   });
 
   // thumbnail animation
+
   var timer,
   count = 0,
   cycle = function(el, root){
@@ -132,6 +142,7 @@ Version: 1.0
         el.attr('src', root + '_1.jpg')
       })
   };
+  
   $('.video-card').hover(function(){
     var gambar = $('img', this);
     var thumbDefault = gambar.attr('thumb-default');
@@ -144,5 +155,6 @@ Version: 1.0
     var thumbDefault = gambar.attr('thumb-default');
     gambar.attr('src', thumbDefault);
   });
+  
 
 })(jQuery); // End of use strict

@@ -8,6 +8,7 @@ from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from albums.views import upload_picture, albums, album_photo
 from stories.views import create_story, stories
+from videos.views import video_page
 
 from django.contrib.auth import views as auth_views
 from accounts.views import logout, SignUp, UpdateProfile, profile
@@ -57,6 +58,9 @@ urlpatterns = [
 
     path('albums/', albums, name='albums'),
     path('albums/<int:aid>/show', album_photo, name='album-photo'),
+
+    path('videos/<int:pk>/play', video_page, name='video-page'),
+
 
 
 
