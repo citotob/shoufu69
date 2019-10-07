@@ -8,10 +8,27 @@ from django.http import HttpResponse
 from stories.forms import StoryForm
 from .models import StoryCategory, Story
 
+import random
+
 def stories(request):
     stories = Story.objects.all().order_by('-adddate')
-    context = {'stories' : stories}
+    story_cat = StoryCategory.objects.all()
+    context = {'stories' : stories, 'story_cat': story_cat}
     return render(request, 'stories.html', context)
+
+def story_page(request, pk):
+    story = Story.objects.get(pk=pk)
+    story_cat = StoryCategory.objects.all()
+
+    story_item = Story.objects.all()
+    len_story = len(story_item)
+    if len_story > 4 :
+        random_story =  random.sample(list(story_item), 5)
+    else :
+        random_story =  random.sample(list(story_item), len_story)
+
+    context = { 'story': story , 'story_cat' : story_cat, 'random_story' : random_story }
+    return render(request, 'story-page.html', context)    
 
 def create_story(request):
     if request.user.is_authenticated:

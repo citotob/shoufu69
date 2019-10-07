@@ -4,177 +4,114 @@
 {% block content %}
 
 <div id="content-wrapper">
-    <div class="container-fluid pb-0">
-        <div class="top-mobile-search">
-            <div class="row">
-                <div class="col-md-12">   
-                <form class="mobile-search">
-                    <div class="input-group">
-                        <input type="text" placeholder="Search for..." class="form-control">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-dark"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>   
-                </div>
-            </div>
-        </div>
+    <div class="container-fluid">
+        <section class="blog-page section-padding">
+            <div class="container">
 
-        <hr>
-
-        <div class="video-block section-padding">
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-title">
                         <div class="btn-group float-right right-action">
-                            <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
+                            <a aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" class="right-action-link text-gray" href="#">
+                            Sort by <i aria-hidden="true" class="fa fa-caret-down"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
                             </div>
                         </div>
-                        <h6>Suggested Stories</h6>
+                           <h6>Stories</h6>
                     </div>
                 </div>
 
-                <!-- for loop  -->
-                {% for story in stories %}
-                <div class="col-xl-3 col-sm-6 mb-3">
-                    <div class="video-card">
-                        <div class="video-card-image">
-                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                            <a href="#"><img class="img-fluid" src={{ story.thumb.url }} alt=""></a>
+                <div class="col-lg-9 col-md-12">
+                    <div class="row">
+                        {% for  story in stories  %}
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                           <div class="card blog mb-4">
+                              <div class="blog-header">  
+                                 <a href="{% url 'story-detail' story.id %}"><img class="card-img-top" src="{{ MEDIA_URL }}{{ story.thumb }}" alt="Card image cap"></a>
+                              </div>
+                              <div class="card-body">
+                                 <h6 class="card-title"><a href="{% url 'story-detail' story.id %}"> {{ story.title }} </a></h6>
+                                 <div class="entry-meta">
+                                    <ul class="tag-info list-inline">
+                                       <li class="list-inline-item"><a href="#"><i class="fas fa-calendar"></i> {{ story.adddate |date:'b d, Y' }} </a></li>
+                                       <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="#">{{ story.category }}</a></li>
+                                       <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#">4</a></li>
+                                    </ul>
+                                 </div>
+                                 <p class="card-text">{{ story.content | striptags | truncatewords:10 }}
+                                 </p>
+                                 <a href="{% url 'story-detail' story.id %}">READ MORE <span class="fas fa-chevron-right"></span></a>
+                              </div>
+                           </div>
                         </div>
-                        <div class="video-card-body">
-                            <div class="video-title">
-                                <a href="#">{{ story.title }}</a>
-                            </div>
-                            <div class="video-page text-success">
-                                {{ story.category }}  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                            </div>
-                            <div class="video-view">
-                                {{ story.total_views }} views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                        {% endfor %}
+                    </div>
+
+                    <ul class="pagination justify-content-center mt-4 pagination-sm">
+                        <li class="page-item disabled">
+                           <span class="page-link">Previous</span>
+                        </li>
+                        <li class="page-item"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item active">
+                           <span class="page-link">
+                           2
+                           <span class="sr-only">(current)</span>
+                           </span>
+                        </li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                        <li class="page-item">
+                           <a href="#" class="page-link">Next</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input type="text" placeholder="Search For" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary">Search <i class="fas fa-arrow-right"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% endfor %}
+
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-body">
+                           <h5 class="card-title mb-3">Categories</h5>
+                           <ul class="sidebar-card-list">
+                              {% for sc in story_cat %}
+                                 <li><a href="#"><i class="fas fa-chevron-right"></i> {{ sc.name }} </a></li>
+                              {% endfor %}
+                           </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Newsletter</h5>
+                            <div class="input-group">
+                                <input type="text" placeholder="Your email address" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary">Sign up <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
+               </div>
             </div>
-        </div>
-
-        <hr>
-
-        <div class="video-block section-padding">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="main-title">
-                        <div class="btn-group float-right right-action">
-                            <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
-                            </div>
-                        </div>
-                        <h6>Popular Video</h6>
-                    </div>
-                </div>
-                
-                <!-- for loop  -->
-
-                <div class="col-xl-3 col-sm-6 mb-3">
-                    <div class="video-card">
-                        <div class="video-card-image">
-                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                            <a href="#"><img class="img-fluid" src="{{ MEDIA_URL }}/images/v1.png" alt=""></a>
-                            <div class="time">3:50</div>
-                        </div>
-                        <div class="video-card-body">
-                            <div class="video-title">
-                                <a href="#">There are many variations of passages of Lorem</a>
-                            </div>
-                            <div class="video-page text-success">
-                                Education  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                            </div>
-                            <div class="video-view">
-                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="video-card">
-                            <div class="video-card-image">
-                                <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                                <a href="#"><img class="img-fluid" src="{{ MEDIA_URL }}/images/v1.png" alt=""></a>
-                                <div class="time">3:50</div>
-                            </div>
-                            <div class="video-card-body">
-                                <div class="video-title">
-                                    <a href="#">There are many variations of passages of Lorem</a>
-                                </div>
-                                <div class="video-page text-success">
-                                    Education  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                                </div>
-                                <div class="video-view">
-                                    1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="video-card">
-                            <div class="video-card-image">
-                                <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                                <a href="#"><img class="img-fluid" src="{{ MEDIA_URL }}/images/v1.png" alt=""></a>
-                                <div class="time">3:50</div>
-                            </div>
-                            <div class="video-card-body">
-                                <div class="video-title">
-                                    <a href="#">There are many variations of passages of Lorem</a>
-                                </div>
-                                <div class="video-page text-success">
-                                    Education  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                                </div>
-                                <div class="video-view">
-                                    1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="video-card">
-                            <div class="video-card-image">
-                                <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                                <a href="#"><img class="img-fluid" src="{{ MEDIA_URL }}/images/v1.png" alt=""></a>
-                                <div class="time">3:50</div>
-                            </div>
-                            <div class="video-card-body">
-                                <div class="video-title">
-                                    <a href="#">There are many variations of passages of Lorem</a>
-                                </div>
-                                <div class="video-page text-success">
-                                    Education  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
-                                </div>
-                                <div class="video-view">
-                                    1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
-                                </div>
-                            </div>
-                        </div>
-                </div>
-
-            </div>
-        </div>
-
+        </section>
     </div>
 </div>
-    <!-- /.container-fluid -->
 
-{% endblock content %}
-
-   
+{% endblock %}
