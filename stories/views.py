@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 from django.http import HttpResponse
@@ -17,7 +17,7 @@ def stories(request):
     return render(request, 'stories.html', context)
 
 def story_page(request, pk):
-    story = Story.objects.get(pk=pk)
+    story = get_object_or_404(Story, pk=pk)
     story_cat = StoryCategory.objects.all()
 
     story_item = Story.objects.all()

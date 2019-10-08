@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Video, VideoCategory
 import random
 
 def video_page(request, pk):
-    video = Video.objects.get(pk=pk)
+    video = get_object_or_404(Video, pk=pk)
     
     video_item = Video.objects.all()
     len_video = len(video_item)

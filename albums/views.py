@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+from django.shortcuts import render,  get_object_or_404, get_list_or_404
 
 from django.http import HttpResponse
 from .models import Album, AlbumCategory, Photo
@@ -23,8 +23,8 @@ def albums(request):
 
 def album_photo(request, aid):
 
-    photos = Photo.objects.filter(aid=aid)
-    album = Album.objects.get(pk=aid)
+    photos = get_list_or_404(Photo, aid=aid)
+    album = get_object_or_404(Album, pk=aid)
     albums_cat = AlbumCategory.objects.all()
     
 
