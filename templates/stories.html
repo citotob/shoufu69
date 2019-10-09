@@ -37,8 +37,8 @@
                                  <h6 class="card-title"><a href="{% url 'story-detail' story.id %}"> {{ story.title }} </a></h6>
                                  <div class="entry-meta">
                                     <ul class="tag-info list-inline">
-                                       <li class="list-inline-item"><a href="#"><i class="fas fa-calendar"></i> {{ story.adddate |date:'b d, Y' }} </a></li>
-                                       <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="#">{{ story.category }}</a></li>
+                                       <li class="list-inline-item"><i class="fas fa-calendar"></i> {{ story.adddate |date:'b d, Y' }} </li>
+                                       <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="{% url 'story-category' story.category.slug %}">{{ story.category }}</a></li>
                                        <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#">4</a></li>
                                     </ul>
                                  </div>

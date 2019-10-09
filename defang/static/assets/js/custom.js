@@ -115,7 +115,7 @@ Version: 1.0
     var wd = $('.sdb .video-card-image img').width();
     var hg = (wd / 16) * 9;
     console.log(wd);
-    $('.sdb .video-card-image img').height(hg);
+    $('.sdb .video-card-image, .sdb .video-card-image img').height(hg);
   }
 
   resize_thumbs();

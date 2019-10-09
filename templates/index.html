@@ -46,7 +46,7 @@
                     <div class="video-card">
                         <div class="video-card-image">
                             <a class="play-icon" href="{% url 'video-page' vid.id %}"><i class="fas fa-play-circle"></i></a>
-                            <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src={{ vid.thumb_url }} thumb-default={{ vid.thumb_url }} alt=""></a>
+                            <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src={{ vid.thumb_url }} thumb-default={{ vid.thumb_url }} alt="{{ vid.title }}"></a>
                             <div class="time">{{ vid.duration }}</div>
                         </div>
                         <div class="video-card-body">
@@ -54,10 +54,12 @@
                                 <a href="{% url 'video-page' vid.id %}">{{ vid.title }}</a>
                             </div>
                             <div class="video-page text-success">
-                                {{ vid.category }}  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
+                                <a class="text-success" href="{% url 'video-channel' vid.uid.id %}">{{ vid.uid }}</a>
                             </div>
                             <div class="video-view">
-                                {{ vid.viewnumber }} views &nbsp;<i class="fas fa-calendar-alt"></i> {{ vid.adddate|date:' b d'  }}
+                                 {{ vid.viewnumber }} views - 
+                                 <i class="fas fa-calendar-alt"></i> {{ vid.adddate|date:' b d'  }} - 
+                                 <a class="text-warning" href="{% url 'video-category' vid.category.slug %}">{{ vid.category }}</a>
                             </div>
                         </div>
                     </div>
@@ -177,5 +179,3 @@
     <!-- /.container-fluid -->
 
 {% endblock content %}
-
-   

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 
 from django.http import HttpResponse
 from stories.forms import StoryForm
@@ -29,6 +28,16 @@ def story_page(request, pk):
 
     context = { 'story': story , 'story_cat' : story_cat, 'random_story' : random_story }
     return render(request, 'story-page.html', context)    
+
+def story_category(request, slug):
+    stories = get_list_or_404(Story.objects.order_by('-adddate'), category__slug=slug)
+    category = StoryCategory.objects.get(slug=slug)
+
+    archive_title = 'Story Category : ' + category.name 
+    story_cat = StoryCategory.objects.all()
+
+    context = {'stories' : stories, 'archive_title': archive_title, 'story_cat' :  story_cat}
+    return render(request, 'story-archive.html', context)
 
 def create_story(request):
     if request.user.is_authenticated:

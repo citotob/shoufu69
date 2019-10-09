@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render,  get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render,  get_object_or_404, get_list_or_404
 
 from django.http import HttpResponse
 from .models import Album, AlbumCategory, Photo
@@ -13,7 +13,7 @@ def albums(request):
     #albums = Album.objects.all().order_by('-adddate')
     #albums = Album.objects.all().prefetch_related('id')
     with connection.cursor() as cursor:
-        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
+        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto, a.adddate, c.`slug` category from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
         row = cursor.fetchall()
 
     albums = row
@@ -37,6 +37,16 @@ def album_photo(request, aid):
 
     context = {'photos': photos, 'album' : album, 'albums_cat' : albums_cat, 'random_album' : random_album}
     return render(request, 'album-photo.html', context)
+
+def album_category(request, slug):
+    albums = get_list_or_404(Album.objects.order_by('-adddate'), category__slug=slug)
+    category = AlbumCategory.objects.get(slug=slug)
+
+    archive_title = 'Album Category : ' + category.name 
+    albums_cat = AlbumCategory.objects.all()
+
+    context = {'albums' : albums, 'archive_title':archive_title, 'albums_cat' :  albums_cat}
+    return render(request, 'album-archive.html', context)
 
 def upload_picture(request):
 

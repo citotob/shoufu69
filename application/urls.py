@@ -6,9 +6,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from albums.views import upload_picture, albums, album_photo
-from stories.views import create_story, stories, story_page
-from videos.views import video_page
+from albums.views import upload_picture, albums, album_photo, album_category
+from stories.views import create_story, stories, story_page, story_category
+from videos.views import video_page, video_category, video_channel
 
 from django.contrib.auth import views as auth_views
 from accounts.views import logout, SignUp, UpdateProfile, profile
@@ -56,12 +56,15 @@ urlpatterns = [
     path('create-story/', create_story, name='create-story'),
     path('stories/', stories, name='stories'),
     path('stories/<int:pk>/read', story_page, name='story-detail'),
+    path('stories/category/<slug>', story_category, name='story-category'),
 
     path('albums/', albums, name='albums'),
     path('albums/<int:aid>/show', album_photo, name='album-photo'),
+    path('albums/category/<slug>', album_category, name='album-category'),
 
     path('videos/<int:pk>/play', video_page, name='video-page'),
-
+    path('videos/category/<slug>', video_category, name='video-category'),
+    path('videos/channel/<int:pk>', video_channel, name='video-channel'),
 
 
 
