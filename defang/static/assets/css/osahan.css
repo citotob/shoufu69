@@ -5,19 +5,19 @@ Author URI: https://themeforest.net/user/askbootstrap
 Version: 1.0
 */
 /*
-	-- Body 
-	-- Nav
-	-- Sidebar
-	-- Customize Bootstrap
-	-- Category Slider
-	-- Video Card
-	-- Channels Card
-	-- Upload Details
-	-- Watch History
-	-- Single Channel
+    -- Body 
+    -- Nav
+    -- Sidebar
+    -- Customize Bootstrap
+    -- Category Slider
+    -- Video Card
+    -- Channels Card
+    -- Upload Details
+    -- Watch History
+    -- Single Channel
     -- Video Page
     -- My Account
-	-- Footer
+    -- Footer
 */
 /* Body */
  html {
@@ -941,6 +941,16 @@ Version: 1.0
  .video-card-list:hover .video-card-body .right-action {
      opacity: unset;
 }
+
+.modal-share .modal-body a:hover {
+    color: #ff7f52!important;
+}
+.modal-share .modal-body a {
+    font-size: 24px;
+    padding-left: 10px;
+    color: white!important;
+}
+
 /* Channels Card */
  .channels-card {
      background: #1c1c1c none repeat scroll 0 0;
@@ -1254,7 +1264,6 @@ Version: 1.0
 .tag-info.list-inline a {
     color: #e6e6e6;
 }
-
 
 /* Mobile Media */
 /* Extra small devices (portrait phones, less than 576px) */
