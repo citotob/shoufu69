@@ -38,7 +38,7 @@ urlpatterns = [
              template_name='account/password_reset_done.html'
          ),
          name='password_reset_done'),
-    path('password-reset-confirm/<uidb64>/<token>/',
+    path('password-reset-confirm/(?P<uidb64>[0-9]+)/<token>/',
          auth_views.PasswordResetConfirmView.as_view(
              template_name='account/password_reset_confirm.html'
          ),
@@ -55,6 +55,7 @@ urlpatterns = [
 
     path('create-story/', create_story, name='create-story'),
     path('stories/', stories, name='stories'),
+<<<<<<< Updated upstream
     path('stories/<int:pk>/read', story_page, name='story-detail'),
     path('stories/category/<slug>', story_category, name='story-category'),
     path('mystories/', mystories, name='mystories'),
@@ -64,6 +65,14 @@ urlpatterns = [
     path('albums/category/<slug>', album_category, name='album-category'),
     path('albums/tag/<int:pk>', album_tag, name='album-tag'),
     path('myphotos/', myalbums, name='myalbums'),
+=======
+    path('stories/(?P<pk>[0-9]+)/read', story_page, name='story-detail'),
+
+    path('albums/', albums, name='albums'),
+    path('albums/(?P<aid>[0-9]+)/show', album_photo, name='album-photo'),
+
+    path('videos/(?P<pk>[0-9]+)/play', video_page, name='video-page'),
+>>>>>>> Stashed changes
 
     path('messages/', include('django_messages.urls')),
 
@@ -76,8 +85,8 @@ urlpatterns = [
     path('videolikes/', videolikes, name='videolikes'),
     path('videodislikes/', videodislikes, name='videodislikes'),
 
-    path('videodelete/<int:video_id>/', videodelete, name='videodelete'),
-    path('edit-video/<int:video_id>/', videoedit, name='videoedit'),
+    path('videodelete/(?P<video_id>[0-9]+)/', videodelete, name='videodelete'),
+    path('edit-video/(?P<video_id>[0-9]+)/', videoedit, name='videoedit'),
 
 
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
