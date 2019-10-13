@@ -1,0 +1,72 @@
+{% extends "base_site.html" %}
+{% load static %}
+{% block content %}
+
+<div id="content-wrapper">
+
+    <div class="container-fluid upload-details">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-title">
+                        <h6>Edit Video</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.errors }}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e1">Video Title</label>
+                                <input type="text" placeholder="Set your video title." id="title" name="title" class="form-control" value="{{ form.title.value }}" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e2">Description</label>
+                                <textarea rows="3" id="description" name="description" class="form-control" placeholder="Set your description" required>{{ form.description.value }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="e7">Tags</label>
+                                <input type="text" placeholder="each tag seperate with comma" id="tags" name="tags" class="form-control" value="{{ form.tags.value }}" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" class="custom-select">
+                                    {% for v_category in vc_list %}
+                                        <option value="{{ v_category.id }}"
+                                            {% if v_category.id == category_id%} selected {% endif %}>
+                                            {{v_category.name|capfirst}}
+                                        </option>
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="osahan-area text-right mt-3">
+                        <button type="submit" class="btn btn-outline-primary">Save Video</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+{% endblock content %}

@@ -53,6 +53,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django_messages',
     'adminsortable2',
     'mptt',
     'ckeditor',
@@ -73,6 +75,9 @@ INSTALLED_APPS = (
     'accounts',
     #'session_security',
 )
+
+SITE_ID = 1
+
 #MIDDLEWARE = (
 #    'django.middleware.security.SecurityMiddleware',
 #    'django.contrib.sessions.middleware.SessionMiddleware',
@@ -110,19 +115,20 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request'
+                'django.template.context_processors.request',
+                'django_messages.context_processors.inbox',
             ],
         },
     },
 ]
 
 #SESSION_EXPIRE_AT_BROWSER_CLOSE=True
-#SESSION_SECURITY_EXPIRE_AFTER=1800
-#SESSION_SECURITY_WARN_AFTER=1740
+#SESSION_SECURITY_EXPIRE_AFTER=10
+#SESSION_SECURITY_WARN_AFTER=5
 
-#SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-#SESSION_COOKIE_AGE = 180 # set just 10 seconds to test
-#SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 300 # set just 10 seconds to test
+SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = 'application.urls'
 
@@ -152,10 +158,13 @@ DATABASES = {
         'PASSWORD': config.get('database', 'PASSWORD'),
         'HOST': config.get('database', 'HOST'),
         'PORT': config.get('database', 'PORT'),
-        'OPTIONS': {'charset': 'utf8', },
-        #'use_unicode' : True,
+        'OPTIONS': {'charset': 'utf8mb4' },
+        'use_unicode' : True,
     }
 }
+
+#FILE_UPLOAD_HANDLERS = ('videos.UploadProgressCachedHandler.UploadProgressCachedHandler', )
+#CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

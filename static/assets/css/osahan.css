@@ -30,6 +30,13 @@ Version: 1.0
      font-size: 13px;
      height: 100%;
 }
+/* add new */
+div.buttonvideo {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
 }
  #wrapper {
@@ -1250,6 +1257,11 @@ Version: 1.0
 .blog-page .card{
     background-color: #1c1c1c;
 }
+
+.tag-info.list-inline a {
+    color: #e6e6e6;
+}
+
 
 /* Mobile Media */
 /* Extra small devices (portrait phones, less than 576px) */

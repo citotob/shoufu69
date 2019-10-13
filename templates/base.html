@@ -3,16 +3,22 @@
 <html dir="ltr" lang="en">
   <head>
     <meta charset="utf-8" />
-    {% if title %}
-        <title>Shoufu69 - {{ title }}</title>
-    {% else %}
-        <title>Shoufu69 -</title>
-    {% endif %}
+    
+    <title>
+        {% block title %}
+          {% if title %}
+              Shoufu69 - {{ title }}
+          {% else %}
+              Shoufu69
+          {% endif %}
+        {% endblock %}
+    </title>
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicon Icon -->
-    <link rel="icon" type="image/png" href='media/images/favicon.png'>
+    <link rel="icon" type="image/png" href='{{MEDIA_URL}}/images/favicon.png'>
     <!-- Bootstrap core CSS-->
     <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Custom fonts for this template-->
@@ -46,6 +52,8 @@
     <script src="{% static 'assets/vendor/owl-carousel/owl.carousel.js' %}"></script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="{% static 'assets/js/upload.js' %}"></script>
+    
 
     {% block extra_footer %}{% endblock %}
     

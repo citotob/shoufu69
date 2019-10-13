@@ -27,7 +27,7 @@ class UpdateProfile(generic.UpdateView):
     fields=['username','email', 'first_name', 'last_name']
     template_name = 'profile.html'
 
-@login_required
+@login_required(login_url='signin')
 def profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)

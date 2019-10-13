@@ -3,13 +3,10 @@
 
 {% block extra_header %}
 
-<link rel="stylesheet" href="https://cdn.fluidplayer.com/v2/current/fluidplayer.min.css" type="text/css"/>
-<script src="{% static 'assets/vendor/fluidplayer/fluidplayer.min.js' %}"></script>
-<script src="{% static 'assets/vendor/sharer/sharer.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'assets/css/fluidplayer.min.css' %}" type="text/css"/>
+<script src="{% static 'assets/js/fluidplayer.min.js' %}"></script>
 
 {% endblock extra_header %}
-
-
 
 {% block content %}
 
@@ -39,32 +36,54 @@
                                 <div class="col-6 text-right">
                                 
                                     <div class="ml-3 d-inline-block">
-                                        <a href="#" class="video-meta-button like-video">
-                                            <i class="far fa-thumbs-up"></i>
-                                            <span>{{ video.likes }}</span>
-                                        </a>
+                                        {% if user.is_authenticated %}
+                                            {% if blike == 1 %}
+                                                <a id="likes" data-vidid="{{video.id}}" class="video-meta-button like-video">
+                                                    <i class="far fa-thumbs-up"></i>
+                                                    <span><strong id="like_count">{{ video.likes }}</strong></span>
+                                                </a>
+                                            {% else %}
+                                                <a href="#" id="likes" data-vidid="{{video.id}}" class="video-meta-button like-video">
+                                                    <i class="far fa-thumbs-up"></i>
+                                                    <span><strong id="like_count">{{ video.likes }}</strong></span>
+                                                </a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a id="likes" data-vidid="{{video.id}}" class="video-meta-button like-video">
+                                                <i class="far fa-thumbs-up"></i>
+                                                <span><strong id="like_count">{{ video.likes }}</strong></span>
+                                            </a>
+                                        {% endif %}
                                     </div>
 
                                     <div class="ml-3 d-inline-block">
-                                        <a href="#" class="video-meta-button dislike-video">
-                                            <i class="far fa-thumbs-down"></i>
-                                            <span>{{ video.dislikes }}</span>
-                                        </a>
+                                        {% if user.is_authenticated %}
+                                            {% if bdislike == 1 %}
+                                                <a id="dislikes" data-vidid="{{video.id}}" class="video-meta-button dislike-video">
+                                                    <i class="far fa-thumbs-down"></i>
+                                                    <span><strong id="dislike_count">{{ video.dislikes }}</strong></span>
+                                                </a>
+                                            {% else %}
+                                                <a href="#" id="dislikes" data-vidid="{{video.id}}" class="video-meta-button dislike-video">
+                                                    <i class="far fa-thumbs-down"></i>
+                                                    <span><strong id="dislike_count">{{ video.dislikes }}</strong></span>
+                                                </a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a id="dislikes" data-vidid="{{video.id}}" class="video-meta-button dislike-video">
+                                                <i class="far fa-thumbs-down"></i>
+                                                <span><strong id="dislike_count">{{ video.dislikes }}</strong></span>
+                                            </a>
+                                        {% endif %}
                                     </div>
 
                                     <div class="ml-3 d-inline-block">
-                                            <a href="#" class="video-meta-button share-video" data-toggle="modal" data-target="#myModal">
+                                            <a href="#" class="video-meta-button share-video">
                                                 <i class="fas fa-share"></i>
                                                 <span>SHARE</span>
-                                                
                                             </a>
-                                            
-                                            
                                         </div>
                                     </div>
-
-                                
-
                                 </div>
                             </div>
                         
@@ -73,7 +92,7 @@
                             <h6>Description :</h6>
                             <p>{{ video.description }}</p>
                             <h6>Category :</h6>
-                            <p><a href="{% url 'video-category' video.category.slug %}">{{ video.category }}</a></p>
+                            <p><a href="#">{{ video.category }}</a></p>
                             
                             <h6>Tags :</h6>
                             <p class="tags mb-0">
@@ -107,18 +126,17 @@
 
                                 <div class="video-card video-card-list">
                                     <div class="video-card-image">
-                                        <a class="play-icon" href="{% url 'video-page' vid.id %}"><i class="fas fa-play-circle"></i></a>
-                                        <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src="{{ vid.thumb_url }}" thumb-default={{ vid.thumb_url }} alt="{{ vid.title }}"></a>
+                                        <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                        <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src="{{ vid.thumb_url }}" alt=""></a>
                                         <div class="time">{{ vid.duration }}</div>
                                     </div>
                                     <div class="video-card-body">
                                         <div class="video-title">
                                             <a href="{% url 'video-page' vid.id %}">{{ vid.title }}</a>
                                         </div>
-                                        <div class="video-page text-warning">
-                                            <a class="text-success" href="{% url 'video-channel' vid.uid.id %}">{{ vid.uid }}</a>
+                                        <div class="video-page text-success">
+                                            {{ vid.category }}  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
                                         </div>
-                                        
                                         <div class="video-view">
                                              {{ vid.viewnumber }} views &nbsp;<i class="fas fa-calendar-alt"></i> {{ vid.adddate|date:' b d'  }}
                                         </div>
@@ -136,9 +154,8 @@
     </div>
 </div>
 
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
       <!-- Modal content-->
@@ -176,35 +193,58 @@
       </div>
       
     </div>
-  </div>
-
-
+</div>
 {% endblock content %}
 
 
 {% block extra_footer %}
 <script>
-    fluidPlayer(
+
+var myplayer = fluidPlayer(
     'video-id',
         {
             layoutControls: {
                 primaryColor: "#ff7f52",
                 playbackRateEnabled: true,
                 allowTheatre: false,
-            },
-            vastOptions: {
             }
         }
-    );
-
+    ); 
     $('#fluid_video_wrapper_video-id').css({'width':'100%','height':'100%'});
-    
+
     function copyText() {
         var copyText = document.getElementById("CopyLinkShare");
         copyText.select();
         document.execCommand("copy");
         $('<div class="ml-2 d-inline-block text-success"> Copied!</div>').insertAfter('.button-copy').delay(1000).hide();
     }
-
 </script>
+
+<script>
+    $('#likes').click(function(e){
+        e.preventDefault();
+        $('#likes').unbind("click");
+        var vid_id;
+        vid_id = $(this).attr("data-vidid");
+        $.get('/videolikes/', {video_id: vid_id}, function(data){
+                $('#like_count').html(data);
+                //$('#likes').attr('disabled', false);
+                //$('#likes').hide();
+        });
+    });
+
+    $('#dislikes').click(function(e){
+        e.preventDefault();
+        $('#dislikes').unbind("click");
+        var vid_id;
+        vid_id = $(this).attr("data-vidid");
+        $.get('/videodislikes/', {video_id: vid_id}, function(data){
+                $('#dislike_count').html(data);
+                //$('#likes').attr('disabled', false);
+                //$('#likes').hide();
+        });
+    });
+</script>
+    
+
 {% endblock extra_footer %}

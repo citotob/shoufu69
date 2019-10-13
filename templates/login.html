@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n admin_static %}
+{% block title %}
+Sign In
+{% endblock %}
 
 {% block content %}
 
@@ -40,7 +43,7 @@
                             {{ form.password.errors }}
                             {{ form.password.label_tag }} 
                             <input type="password" class="form-control" name="{{ form.password.name }}" placeholder="Password">
-                            <input type="hidden" name="next" value="{% url 'home' %}" />
+                            <input type="hidden" name="next" value="{{ next }}" />
                         </div>
                         
                         <div class="mt-4">

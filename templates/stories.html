@@ -37,8 +37,8 @@
                                  <h6 class="card-title"><a href="{% url 'story-detail' story.id %}"> {{ story.title }} </a></h6>
                                  <div class="entry-meta">
                                     <ul class="tag-info list-inline">
-                                       <li class="list-inline-item"><i class="fas fa-calendar"></i> {{ story.adddate |date:'b d, Y' }} </li>
-                                       <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="{% url 'story-category' story.category.slug %}">{{ story.category }}</a></li>
+                                       <li class="list-inline-item"><a href="#"><i class="fas fa-calendar"></i> {{ story.adddate |date:'b d, Y' }} </a></li>
+                                       <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="#">{{ story.category }}</a></li>
                                        <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#">4</a></li>
                                     </ul>
                                  </div>
@@ -51,22 +51,23 @@
                         {% endfor %}
                     </div>
 
-                    <ul class="pagination justify-content-center mt-4 pagination-sm">
-                        <li class="page-item disabled">
-                           <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item active">
-                           <span class="page-link">
-                           2
-                           <span class="sr-only">(current)</span>
-                           </span>
-                        </li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item">
-                           <a href="#" class="page-link">Next</a>
-                        </li>
-                    </ul>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if stories.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ stories.previous_page_number }}">previous</a>
+                            {% endif %}
+                    
+                            <span class="current">
+                                Page {{ stories.number }} of {{ stories.paginator.num_pages }}.
+                            </span>
+                    
+                            {% if stories.has_next %}
+                                <a href="?page={{ stories.next_page_number }}">next</a>
+                                <a href="?page={{ stories.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
 
                 </div>
 

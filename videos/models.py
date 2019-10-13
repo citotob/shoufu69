@@ -9,6 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 import os
 
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+
 # Create your models here.
 @python_2_unicode_compatible
 class VideoCategory(models.Model):
@@ -106,6 +109,10 @@ class Video(models.Model):
     #def get_absolute_url(self):
     #    return ''    
 
+#@receiver(post_delete, sender=Video)
+#def submission_delete(sender, instance, **kwargs):
+#    instance. .file.delete(False) 
+
 class VideoComment(models.Model):
     vid = models.ForeignKey(Video, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -183,6 +190,11 @@ class VideoVoteIp(models.Model):
 class VideoVoteUser(models.Model):
     vid = models.ForeignKey(Video, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    STATUS_ = (
+        ('0','Dislike'),
+        ('1','Like')
+    )
+    status = models.CharField(_('status'),max_length=1, choices=STATUS_,default='1')
 
     class Meta:
         verbose_name = 'VideoVoteUser'

@@ -1,0 +1,30 @@
+{% extends "base_site.html" %}
+{% load static %}
+{% block content %}
+<div id="content-wrapper">
+    <div class="container-fluid pt-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-4 col-sm-6 text-center upload-video pt-5 pb-5">
+                <h1><i class="fas fa-file-video text-primary"></i></h1>
+                <h4 class="mt-5">Upload Video</h4>
+                <p class="land">choose here to upload video files</p>
+                <div class="mt-4">
+                <a class="btn btn-outline-primary" href="{% url 'upload-video' %}">Upload Video</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 text-center upload-video pt-5 pb-5">
+                <h1>
+                <i class="fas fa-portrait text-picture" style=""></i>
+                </h1>
+                <h4 class="mt-5">Upload Picture</h4>
+                <p class="land">choose here to upload picture files</p>
+                <div class="mt-4">
+                <a class="btn btn-outline-picture" href="{% url 'upload-picture' %}">Upload Picture</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+{% endblock content %}

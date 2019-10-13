@@ -111,22 +111,12 @@ Version: 1.0
     $('.video-card-image img').height(hg)
   }
   
-  function resize_thumbs_sidebar(){
-    var wd = $('.sdb .video-card-image img').width();
-    var hg = (wd / 16) * 9;
-    console.log(wd);
-    $('.sdb .video-card-image, .sdb .video-card-image img').height(hg);
-  }
-
   resize_thumbs();
-  resize_thumbs_sidebar()
   $(window).resize(function(){
     resize_thumbs();
-    resize_thumbs_sidebar()
   });
 
   // thumbnail animation
-
   var timer,
   count = 0,
   cycle = function(el, root){
@@ -142,7 +132,6 @@ Version: 1.0
         el.attr('src', root + '_1.jpg')
       })
   };
-  
   $('.video-card').hover(function(){
     var gambar = $('img', this);
     var thumbDefault = gambar.attr('thumb-default');
@@ -154,25 +143,6 @@ Version: 1.0
     var gambar = $('img', this);
     var thumbDefault = gambar.attr('thumb-default');
     gambar.attr('src', thumbDefault);
-  });
-  
-  //change active status on menu sidebar
-  function change_active_status(el) {
-    $('.sidebar .side-menu').removeClass("active");
-    $('.sidebar .side-menu.' + el ).addClass("active");
-  }
-
-  $(document).ready(function(){
-    var current_path = window.location.pathname;
-    var path_array = current_path.split('/');
-    if (current_path == '/' || path_array[1] == 'videos'){
-      change_active_status('video');
-    } else if (path_array[1] == 'stories'){
-      change_active_status('story');
-    } else if (path_array[1] == 'albums') {
-      change_active_status('photo');
-
-    }
   });
 
 })(jQuery); // End of use strict
