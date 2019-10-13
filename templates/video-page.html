@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="{% static 'assets/css/fluidplayer.min.css' %}" type="text/css"/>
 <script src="{% static 'assets/js/fluidplayer.min.js' %}"></script>
-
+<script src="{% static 'assets/vendor/sharer/sharer.min.js' %}"></script>
 {% endblock extra_header %}
 
 {% block content %}
@@ -78,7 +78,7 @@
                                     </div>
 
                                     <div class="ml-3 d-inline-block">
-                                            <a href="#" class="video-meta-button share-video">
+                                            <a href="#" class="video-meta-button share-video" data-toggle="modal" data-target="#myModal">
                                                 <i class="fas fa-share"></i>
                                                 <span>SHARE</span>
                                             </a>
@@ -92,13 +92,64 @@
                             <h6>Description :</h6>
                             <p>{{ video.description }}</p>
                             <h6>Category :</h6>
-                            <p><a href="#">{{ video.category }}</a></p>
+                            <p><a href="{% url 'video-category' video.category.slug %}">{{ video.category }}</a></p>
+
                             
                             <h6>Tags :</h6>
                             <p class="tags mb-0">
-                                <span><a href="#">{{video.tags}}</a></span>
+                                {% for tag in video.videotag_set.all %}
+                                    <span><a href="{% url 'video-tag' tag.id %}">{{tag.tag}}</a></span>
+                                {% endfor %}
                             </p>
                         </div>
+
+                        <div class="card box padding-card reviews-card mb-4">
+                            <div class="card-body">
+
+                                <h5 class="card-title mb-4"> 
+                                {{ video.videocomment_set.all|length}}{% if video.videocomment_set.all|length < 2 %} Comment {% else %} Comments {% endif %}
+                                </h5>
+
+                                {% for comment in video.videocomment_set.all %}
+                                    <div class="media mb-4">
+                                        <img alt="" src="/media/images/user.png" class="d-flex mr-3 rounded">
+                                        <div class="media-body">
+                                            <h5 class="mt-0"> {{ comment.uid }} <small> {{ comment.addtime | date:' b d, Y'| title}} </small></h5>
+                                            <p>{{ comment.comment }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="card box blog">
+                            <div class="card-body">
+                            {% if request.user.is_authenticated %}
+                                <div class="mb-2" >
+                                    <h5 class="card-title d-inline-block">Leave a Comment</h5>
+                                    <span class="ml-1 d-inline-block"> ( as {{request.user}} )</span>
+                                </div>
+
+                                <form method="post"> 
+                                    {% csrf_token %}
+                                    <div class="control-group form-group">
+                                        <div class="controls">
+                                            <label>Comment <span class="text-danger">*</span></label>
+                                            <textarea name="comment" id="id_comment" class="form-control bg-dark" cols="100" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger" type="submit">Post Comment</button>
+                                </form>
+
+                            {% else %}
+                                <div class="mb-2" >
+                                    <h5 class="card-title d-inline-block">Login to Comment</h5>                     
+                                </div>
+                            {% endif %}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -126,17 +177,18 @@
 
                                 <div class="video-card video-card-list">
                                     <div class="video-card-image">
-                                        <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
-                                        <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src="{{ vid.thumb_url }}" alt=""></a>
+                                        <a class="play-icon" href="{% url 'video-page' vid.id %}"><i class="fas fa-play-circle"></i></a>
+                                        <a href="{% url 'video-page' vid.id %}"><img class="img-fluid" src="{{ vid.thumb_url }}" thumb-default={{ vid.thumb_url }} alt="{{ vid.title }}"></a>
                                         <div class="time">{{ vid.duration }}</div>
                                     </div>
                                     <div class="video-card-body">
                                         <div class="video-title">
                                             <a href="{% url 'video-page' vid.id %}">{{ vid.title }}</a>
                                         </div>
-                                        <div class="video-page text-success">
-                                            {{ vid.category }}  <a title="" data-placement="top" data-toggle="tooltip" href="#" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></a>
+                                        <div class="video-page text-warning">
+                                            <a class="text-success" href="{% url 'video-channel' vid.uid.id %}">{{ vid.uid }}</a>
                                         </div>
+                                        
                                         <div class="video-view">
                                              {{ vid.viewnumber }} views &nbsp;<i class="fas fa-calendar-alt"></i> {{ vid.adddate|date:' b d'  }}
                                         </div>
@@ -194,6 +246,48 @@
       
     </div>
 </div>
+
+ <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content modal-share">
+        <div class="modal-header">
+          <h6 class="modal-title">Share this post</h6>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body">
+            <div>
+                <a href='#' class="sharer d-inline-block" data-sharer="weibo" data-url="{{ request.build_absolute_uri }} ">
+                    <i class="fab fa-weibo"></i>
+                </a>
+                <a href='#' class="sharer d-inline-block" data-sharer="renren" data-url="{{ request.build_absolute_uri }} ">
+                    <i class="fab fa-renren"></i>
+                </a>
+                <a href='#' class="sharer d-inline-block" data-sharer="line" data-url="{{ request.build_absolute_uri }} ">
+                    <i class="fab fa-line"></i>
+                </a>
+                <a href='#' class="sharer d-inline-block" data-sharer="telegram" data-url="{{ request.build_absolute_uri }} ">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href='#' class="sharer button-copy d-inline-block" onclick="copyText()">
+                    <i class="fas fa-copy"></i>
+                </a>
+            </div>
+            <div class="mt-2">
+                <input onclick="copyText()" class="d-inline-block" style="background: #333333;border: #ffffff;color: #ffffff;width: 100%;padding: 10px;" type="text" value="{{ request.build_absolute_uri }}" id="CopyLinkShare">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
 {% endblock content %}
 
 

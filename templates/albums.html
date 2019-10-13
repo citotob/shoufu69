@@ -1,5 +1,6 @@
 {% extends "base_site.html" %}
 {% load static %}
+
 {% block content %}
 
 <div id="content-wrapper">
@@ -39,9 +40,9 @@
                            <h6 class="card-title"><a href="{% url 'album-photo' album.0 %}">{{ album.1 }}</a></h6>
                            <div class="entry-meta">
                               <ul class="tag-info list-inline">
-                                 <li class="list-inline-item"><i class="fas fa-tag"></i> <a href="#">{{ album.3 }}</a></li>
-                                 <li class="list-inline-item"><i class="fas fa-calendar"></i> <a href="#"> {{ album.6|date:' b d' }}</a></li>
-                                 <li class="list-inline-item"><i class="fas fa-images"></i> <a href="#">{{ album.5 }} photos</a></li>
+                                 <li class="list-inline-item"><i class="fas fa-tag"></i> <a href="{% url 'album-category' album.7 %}">{{album.3 }}</a></li>
+                                 <li class="list-inline-item"><i class="fas fa-calendar"></i> {{ album.6|date:' b d' }}</li>
+                                 <li class="list-inline-item"><i class="fas fa-images"></i> <a href="{% url 'album-photo' album.0 %}">{{ album.5 }} photos</a></li>
                               </ul>
                            </div>
                         </div>
@@ -51,23 +52,30 @@
 
                </div>
 
-               <div class="pagination">
-                  <span class="step-links">
+               <ul class="pagination justify-content-center mt-4 pagination-sm">
+                  <li class="page-item">
+                     <span class="page-link">
                         {% if albums.has_previous %}
-                           <a href="?page=1">&laquo; first</a>
-                           <a href="?page={{ albums.previous_page_number }}">previous</a>
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ albums.previous_page_number }}">previous</a>
                         {% endif %}
-               
-                        <span class="current">
-                           Page {{ albums.number }} of {{ albums.paginator.num_pages }}.
+                     </span>
+                  </li>
+
+                  <li class="page-item">
+                     <span class="page-link">
+                        Page {{ albums.number }} of {{ albums.paginator.num_pages }}.
+                     </span>
+                  </li>
+                    {% if albums.has_next %}
+                    <li class="page-item">
+                        <span class="page-link">
+                            <a href="?page={{ albums.next_page_number }}">next</a>
+                            <a href="?page={{ albums.paginator.num_pages }}">last &raquo;</a>
                         </span>
-               
-                        {% if stories.has_next %}
-                           <a href="?page={{ albums.next_page_number }}">next</a>
-                           <a href="?page={{ albums.paginator.num_pages }}">last &raquo;</a>
-                        {% endif %}
-                  </span>
-               </div>
+                    </li>
+                    {% endif %}
+               </ul>
 
             </div>
 

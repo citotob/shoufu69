@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from datetime import datetime
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import F
@@ -37,7 +35,7 @@ def myvideos(request):
     #    return redirect('/signin/?next=/create-story/')
 
 def video_page(request, pk):
-    video = Video.objects.get(pk=pk)
+    video = get_object_or_404(Video, pk=pk)
     video.viewnumber = video.viewnumber + 1
     title = video.title
     video.save()
@@ -64,6 +62,13 @@ def video_page(request, pk):
         
         if vid_dislike:
             bdislike = 1
+
+    if request.method == 'POST':
+        user_id = request.user
+        comment_post = request.POST['comment']
+        comment = VideoComment(vid=video, uid=user_id, comment=comment_post)
+        comment.save()
+        return redirect(reverse('video-page', args=[pk]))
 
     context = {'video': video , 'random_video' : random_video, 'title' : title, 'blike' : blike, 'bdislike' : bdislike }
     return render(request, 'video-page.html', context)
@@ -172,3 +177,27 @@ def get_upload_progress(request):
   cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], request.GET['X-Progress-ID'])
   data = cache.get(cache_key)
   return HttpResponse(json.dumps(data))
+
+def video_category(request, slug):
+    vids = get_list_or_404(Video.objects.order_by('-adddate'), category__slug=slug)
+    category = VideoCategory.objects.get(slug=slug)
+
+    archive_title = 'Video Category : ' + category.name 
+    context = {'vids' : vids, 'archive_title':archive_title}
+    return render(request, 'video-archive.html', context)
+
+def video_tag(request, pk):
+    vids = get_list_or_404(Video.objects.order_by('-adddate'), videotag__id=pk)
+    tag = VideoTag.objects.get(pk=pk)
+
+    archive_title = 'Video Tag : ' + tag.tag 
+    context = {'vids' : vids, 'archive_title':archive_title}
+    return render(request, 'video-archive.html', context)
+
+def video_channel(request, pk):
+    vids = get_list_or_404(Video.objects.order_by('-adddate'), uid=pk)
+    
+    user = User.objects.get(pk=pk)
+    archive_title = 'Video Channel : ' +  user.username
+    context = {'vids' : vids, 'archive_title':archive_title}
+    return render(request, 'video-archive.html', context)

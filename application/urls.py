@@ -6,10 +6,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from albums.views import upload_picture, albums, album_photo
-from stories.views import create_story, stories, mystories, story_page
-from videos.views import myvideos, video_page, videolikes, videodislikes, videodelete, videoedit
-from albums.views import myalbums
+from albums.views import upload_picture, albums, album_photo, myalbums, album_category, album_tag
+from stories.views import create_story, stories, mystories, story_page, , story_category
+from videos.views import myvideos, video_page, videolikes, videodislikes, videodelete, videoedit,  video_category, video_channel, video_tag
 
 from django.contrib.auth import views as auth_views
 from accounts.views import logout, SignUp, UpdateProfile, profile
@@ -57,17 +56,22 @@ urlpatterns = [
     path('create-story/', create_story, name='create-story'),
     path('stories/', stories, name='stories'),
     path('stories/<int:pk>/read', story_page, name='story-detail'),
+    path('stories/category/<slug>', story_category, name='story-category'),
+    path('mystories/', mystories, name='mystories'),
 
     path('albums/', albums, name='albums'),
     path('albums/<int:aid>/show', album_photo, name='album-photo'),
-
-    path('videos/<int:pk>/play', video_page, name='video-page'),
+    path('albums/category/<slug>', album_category, name='album-category'),
+    path('albums/tag/<int:pk>', album_tag, name='album-tag'),
+    path('myphotos/', myalbums, name='myalbums'),
 
     path('messages/', include('django_messages.urls')),
 
+    path('videos/<int:pk>/play', video_page, name='video-page'),
     path('myvideos/', myvideos, name='myvideos'),
-    path('myphotos/', myalbums, name='myalbums'),
-    path('mystories/', mystories, name='mystories'),
+    path('videos/category/<slug>', video_category, name='video-category'),
+    path('videos/channel/<int:pk>', video_channel, name='video-channel'),
+    path('videos/tag/<int:pk>', video_tag, name='video-tag'),
 
     path('videolikes/', videolikes, name='videolikes'),
     path('videodislikes/', videodislikes, name='videodislikes'),

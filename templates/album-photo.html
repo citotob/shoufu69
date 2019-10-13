@@ -29,74 +29,94 @@
                   <div class="col-md-8">
                      <div class="card blog mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">{{ album.name }}</h5>
-                            <div class="entry-meta">
-                                <ul class="tag-info list-inline">
+                           <h5 class="card-title text-white">{{ album.name|title }}</h5>
+                           <div class="entry-meta">
+                              <ul class="tag-info list-inline">
                                     <li class="list-inline-item"><a href="#"><i class="fas fa-calendar"></i> {{ album.adddate|date:'d-b-Y' }} </a></li>
-                                    <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="#">{{ album.category }}</a></li>
+                                    <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="{% url 'album-category' album.category.slug %}">{{ album.category }}</a></li>
                                     {% comment %} <li class="list-inline-item"><i class="fas fa-tag"></i> <a rel="tag" href="#">envato</a>, <a rel="tag" href="#">sale</a>, <a rel="tag" href="#">shop</a> </li> {% endcomment %}
-                                    <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#">1 Comment</a></li>
-                                </ul>
-                            </div>
-                            <div class="content-body">                              
-                                 <div >
-                                    <div id="lightgallery" class="row">
-                                        {% comment %} {{ photos }} {% endcomment %}
-                                        {% for photo in photos %}
-                                            <a class="col-md-6 photo-item" data-sub-html=".caption" href="{{ MEDIA_URL }}{{ photo.image}}">
-                                                <img class="img-fluid " src="{{ MEDIA_URL }}{{ photo.image}}" />
-                                                <div class="caption text-white text-center w-100">{{ photo.caption }}</div>
-                                            </a>
-                                        {% endfor %}
+                                    <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#comment">{{ album.photocomment_set.all|length}}{% if album.photocomment_set.all|length < 2 %} Comment {% else %} Comments {% endif %}</a></li>
+                              </ul>
+                           </div>
 
-                                    </div>
+                           <div class="content-body">                              
+                              <div>
+                                 <div id="lightgallery" class="row">
+                                       {% comment %} {{ photos }} {% endcomment %}
+                                       {% for photo in photos %}
+                                          <a class="col-md-6 photo-item" data-sub-html=".caption" href="{{ MEDIA_URL }}{{ photo.image}}">
+                                             <img class="img-fluid " src="{{ MEDIA_URL }}{{ photo.image}}" />
+                                             <div class="caption text-white text-center w-100">{{ photo.caption }}</div>
+                                          </a>
+                                       {% endfor %}
                                  </div>
-                            </div>
-                        </div>
-
-                     </div>
-                     <div class="card padding-card reviews-card mb-4">
-                        <div class="card-body">
-                           <h5 class="card-title mb-4">1 Comments</h5>
-                           <div class="media mb-4">
-                              <img alt="" src="img/s2.png" class="d-flex mr-3 rounded">
-                              <div class="media-body">
-                                 <h5 class="mt-0">Stave Martin <small>Feb 12, 2018</small> 
-                                 </h5>
-                                 <p>ini contoh Contoh komen</p>
                               </div>
                            </div>
+
+                           <footer class="entry-footer mt-3">
+                              <div class="blog-post-tags">
+                                 <ul class="list-inline">
+                                    <li class="list-inline-item"><i class="fas fa-tag"></i> Tags: </li>
+                                    {% for tag in album.albumtag_set.all %}
+                                       <li class="list-inline-item"><a rel="tag" href="{% url 'album-tag' tag.id %}">{{tag.tag}}</a> </li>
+                                    {% endfor %}   
+                                 </ul>
+                              </div>
+                           </footer>
+
                         </div>
+
                      </div>
+
+                     <div id="comment" class="card padding-card reviews-card mb-4">
+                           <div class="card-body">
+
+                              <h5 class="card-title mb-4"> 
+                              {{ album.photocomment_set.all|length}}{% if album.photocomment_set.all|length < 2 %} Comment {% else %} Comments {% endif %}
+                              </h5>
+
+                              {% for comment in album.photocomment_set.all %}
+                                 <div class="media mb-4">
+                                       <img alt="" src="/media/images/user.png" class="d-flex mr-3 rounded">
+                                       <div class="media-body">
+                                          <h5 class="mt-0"> {{ comment.uid }} <small> {{ comment.addtime | date:' b d, Y'| title}} </small></h5>
+                                          <p>{{ comment.comment }}</p>
+                                       </div>
+                                 </div>
+                              {% endfor %}
+
+                           </div>
+                     </div>
+
                      <div class="card blog">
-                        <div class="card-body">
-                           <h5 class="card-title mb-4">Leave a Comment</h5>
-                           <form name="sentMessage">
-                              <div class="row">
-                                 <div class="control-group form-group col-lg-6 col-md-6">
-                                    <div class="controls">
-                                       <label>Your Name <span class="text-danger">*</span></label>
-                                       <input type="text" required="" class="form-control">
-                                    </div>
-                                 </div>
-                                 <div class="control-group form-group col-lg-6 col-md-6">
-                                    <div class="controls">
-                                       <label>Your Email <span class="text-danger">*</span></label>
-                                       <input type="email" required="" class="form-control">
-                                    </div>
-                                 </div>
+                           <div class="card-body">
+                           {% if request.user.is_authenticated %}
+                              <div class="mb-2" >
+                                 <h5 class="card-title d-inline-block">Leave a Comment</h5>
+                                 <span class="ml-1 d-inline-block"> ( as {{request.user}} )</span>
                               </div>
-                              <div class="control-group form-group">
-                                 <div class="controls">
-                                    <label>Review <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" cols="100" rows="10"></textarea>
+
+                              <form method="post"> 
+                                 {% csrf_token %}
+                                 <div class="control-group form-group">
+                                       <div class="controls">
+                                          <label>Comment <span class="text-danger">*</span></label>
+                                          <textarea name="comment" id="id_comment" class="form-control bg-dark" cols="100" rows="10"></textarea>
+                                       </div>
                                  </div>
+                                 <button class="btn btn-danger" type="submit">Post Comment</button>
+                              </form>
+
+                           {% else %}
+                              <div class="mb-2" >
+                                 <h5 class="card-title d-inline-block">Login to Comment</h5>                     
                               </div>
-                              <button class="btn btn-danger" type="submit">Post Comment</button>
-                           </form>
-                        </div>
+                           {% endif %}
+                           </div>
                      </div>
+
                   </div>
+
                   <div class="col-md-4">
                      <div class="card sidebar-card mb-4">
                         <div class="card-body">
@@ -114,7 +134,7 @@
                         <h5 class="card-title mb-3">Category</h5>
                         <ul class="sidebar-card-list">
                             {% for cat in albums_cat %}
-                            <li><a href="#"><i class="fas fa-chevron-right"></i> {{cat.name}}</a></li>
+                            <li><a href="{% url 'album-category' cat.slug %}"><i class="fas fa-chevron-right"></i> {{cat.name}}</a></li>
                             {% endfor %}
                         </ul>
                         </div>
@@ -129,8 +149,8 @@
                                 </a>
                                 <p class="mb-0"><i class="fas fa-calendar-text"></i> {{ rd.adddate|date:'b d, Y' }}</p>
                                 <hr>
-                                
                            {% endfor %}
+
                         </div>
                      </div>
                   </div>
@@ -152,7 +172,7 @@
         $(document).ready(function() {
             $("#lightgallery").lightGallery({
                 thumbnail:true,
-                subHtmlSelectorRelative: true,
+                subHtmlSelectorRelative: true
             }); 
         });
     </script>

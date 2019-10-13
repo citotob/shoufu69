@@ -1,0 +1,113 @@
+{% extends "base_site.html" %}
+{% load static %}
+{% block content %}
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <section class="blog-page photo-index section-padding">
+      <div class="container">
+
+         <div class="row">
+
+            <div class="col-md-12">
+                <div class="main-title">
+                   <div class="btn-group float-right right-action">
+                      <a aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" class="right-action-link text-gray" href="#">
+                      Sort by <i aria-hidden="true" class="fa fa-caret-down"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                         <a href="#" class="dropdown-item"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
+                         <a href="#" class="dropdown-item"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
+                         <a href="#" class="dropdown-item"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
+                      </div>
+                   </div>
+                   <h6>{{ archive_title }}</h6>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-12">
+
+               <div class="row">
+
+                  {% for album in albums %}
+                     <div class="col-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card blog mb-4">
+                           <div class="blog-header">  
+                              <a href="{% url 'album-photo' album.id %}"><img class="card-img-top" src={{ MEDIA_URL }}{% with album.photo_set.all|first as first_photo %}{{first_photo.image}}{% endwith %} alt="Card image cap"></a>
+                           </div>                                  
+                           <div class="card-body">
+                              <h6 class="card-title"><a href="{% url 'album-photo' album.id %}">{{ album.name }}</a></h6>
+                              <div class="entry-meta">
+                                 <ul class="tag-info list-inline">
+                                    <li class="list-inline-item"><i class="fas fa-tag"></i> <a href="{% url 'album-category' album.category.slug %}">{{album.category }}</a></li>
+                                    <li class="list-inline-item"><i class="fas fa-calendar"></i> {{ album.adddate|date:' b d' }}</li>
+                                    <li class="list-inline-item"><i class="fas fa-images"></i> <a href="{% url 'album-photo' album.id %}">{{album.photo_set.all|length}} photos</a></li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  {% endfor %}
+
+               </div>
+
+               <ul class="pagination justify-content-center mt-4 pagination-sm">
+                  <li class="page-item">
+                     <span class="page-link">
+                        {% if stories.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ stories.previous_page_number }}">previous</a>
+                        {% endif %}
+                     </span>
+                  </li>
+
+                  <li class="page-item">
+                     <span class="page-link">
+                     Page {{ stories.number }} of {{ stories.paginator.num_pages }}.
+                    
+                     </span>
+                  </li>
+                    {% if stories.has_next %}
+                    <li class="page-item">
+                        <span class="page-link">
+                            <a href="?page={{ stories.next_page_number }}">next</a>
+                            <a href="?page={{ stories.paginator.num_pages }}">last &raquo;</a>
+                        </span>
+                    </li>
+                    {% endif %}
+               </ul>
+
+            </div>
+
+            <div class="col-lg-3 col-md-12">
+              <div class="card sidebar-card mb-4">
+                <div class="card-body">
+                   <div class="input-group">
+                      <input type="text" placeholder="Search For" class="form-control">
+                      <div class="input-group-append">
+                         <button type="button" class="btn btn-secondary">Search <i class="fas fa-arrow-right"></i></button>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div class="card sidebar-card mb-4">
+                <div class="card-body">
+                   <h5 class="card-title mb-3">Category</h5>
+                   <ul class="sidebar-card-list">
+                     {% for cat in albums_cat %}
+                      <li><a href="#"><i class="fas fa-chevron-right"></i> {{cat.name}}</a></li>
+                     {% endfor %}
+                   </ul>
+                </div>
+              </div>
+
+            </div>
+
+         </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock content %}

@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from videos.forms import VideoForm
-from videos.models import VideoCategory, Video, VideoThumbnails
+from videos.models import VideoCategory, Video, VideoThumbnails, VideoTag
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 import subprocess
@@ -117,6 +117,19 @@ def upload_video(request):
         #os.remove(img_output_path)
 
         #messages.success(request, f'Your video has been uploaded!')
+
+        # Proses Tagging
+        list_tags = tags.split(',')
+        list_tags = [i.strip().lower() for i in list_tags]
+        
+        for tg in list_tags:
+            if VideoTag.objects.filter(tag=tg).exists():
+                current_tag = VideoTag.objects.filter(tag=tg).first()
+                current_tag.videos.add(vid)
+            else:
+                create_tag = VideoTag(uid=user_id, tag=tg)
+                create_tag.save()
+                create_tag.videos.add(vid)
         
         vc_list = VideoCategory.objects.all()
         context = {'vc_list' : vc_list}

@@ -26,61 +26,70 @@
                     <div class="col-md-8">
                         <div class="card blog mb-4">
                             <div class="blog-header">  
-                                <a href="#"><img class="card-img-top" src="{{ MEDIA_URL }}{{ story.thumb }}" alt="Card image cap"></a>
+                                <img class="card-img-top" src="{{ MEDIA_URL }}{{ story.thumb }}" alt="Card image cap">
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title"><a href="#">{{ story.title }}</a></h5>
+                                <h2 class="card-title h3 text-white">{{ story.title|title }}</h2>
                             <div class="entry-meta">
                                 <ul class="tag-info list-inline">
                                     <li class="list-inline-item"><a href="#"><i class="fas fa-calendar"></i> {{ story.adddate|date:' b d, Y' }} </a></li>
-                                    <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="#"> {{ story.category }} </a></li>
-                                    <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#">4 Comments</a></li>
+                                    <li class="list-inline-item"><i class="fas fa-folder"></i> <a rel="category tag" href="{% url 'story-category' story.category.slug  %}"> {{ story.category }} </a></li>
+                                    <li class="list-inline-item"><i class="fas fa-comment"></i> <a href="#comment">{{ story.storycomment_set.all|length}}{% if story.storycomment_set.all|length < 2 %} Comment {% else %} Comments {% endif %}</a></li>
                                 </ul>
                             </div>
-                            <div class="entry-content">
+                            <div class="mt-5 entry-content">
                                 {{ story.content|safe }}
                             </div>
                             </div>
                         </div>
-                        <div class="card padding-card reviews-card mb-4">
+
+                        <div id="comment" class="card padding-card reviews-card mb-4">
                             <div class="card-body">
-                            <h5 class="card-title mb-4">1 Comment</h5>
-                            <div class="media mb-4">
-                                <img alt="" src="img/s2.png" class="d-flex mr-3 rounded">
-                                <div class="media-body">
-                                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                                </div>
-                            </div>
+
+                                <h5 class="card-title mb-4"> 
+                                {{ story.storycomment_set.all|length}}{% if story.storycomment_set.all|length < 2 %} Comment {% else %} Comments {% endif %}
+                                </h5>
+
+                                {% for comment in story.storycomment_set.all %}
+                                    <div class="media mb-4">
+                                        <img alt="" src="/media/images/user.png" class="d-flex mr-3 rounded">
+                                        <div class="media-body">
+                                            <h5 class="mt-0"> {{ comment.uid }} <small> {{ comment.addtime | date:' b d, Y'| title}} </small></h5>
+                                            <p>{{ comment.comment }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
                             </div>
                         </div>
+                    
                         <div class="card blog">
                             <div class="card-body">
-                            <h5 class="card-title mb-4">Leave a Comment</h5>
-                            <form name="sentMessage">
-                                <div class="row">
-                                    <div class="control-group form-group col-lg-6 col-md-6">
+                            {% if request.user.is_authenticated %}
+                                <div class="mb-2" >
+                                    <h5 class="card-title d-inline-block">Leave a Comment</h5>
+                                    <span class="ml-1 d-inline-block"> ( as {{request.user}} )</span>
+                                </div>
+
+                                <form method="post"> 
+                                    {% csrf_token %}
+                                    <div class="control-group form-group">
                                         <div class="controls">
-                                        <label>Your Name <span class="text-danger">*</span></label>
-                                        <input type="text" required="" class="form-control">
+                                            <label>Comment <span class="text-danger">*</span></label>
+                                            <textarea name="comment" id="id_comment" class="form-control bg-dark" cols="100" rows="10"></textarea>
                                         </div>
                                     </div>
-                                    <div class="control-group form-group col-lg-6 col-md-6">
-                                        <div class="controls">
-                                        <label>Your Email <span class="text-danger">*</span></label>
-                                        <input type="email" required="" class="form-control">
-                                        </div>
-                                    </div>
+                                    <button class="btn btn-danger" type="submit">Post Comment</button>
+                                </form>
+
+                            {% else %}
+                                <div class="mb-2" >
+                                    <h5 class="card-title d-inline-block">Login to Comment</h5>                     
                                 </div>
-                                <div class="control-group form-group">
-                                    <div class="controls">
-                                        <label>Review <span class="text-danger">*</span></label>
-                                        <textarea class="form-control" cols="100" rows="10"></textarea>
-                                    </div>
-                                </div>
-                                <button class="btn btn-danger" type="submit">Post Comment</button>
-                            </form>
+                            {% endif %}
                             </div>
                         </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="card sidebar-card mb-4">

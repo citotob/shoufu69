@@ -117,7 +117,7 @@ class VideoComment(models.Model):
     vid = models.ForeignKey(Video, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(_('comment'),blank=True)
-    addtime = models.BigIntegerField(_('addtime'),default=0)
+    addtime = models.DateTimeField(_('Add Time'),auto_now_add=True)
     STATUS_ = (
         ('0','0'),
         ('1','1')
@@ -206,4 +206,13 @@ class VideoVoteUser(models.Model):
 
     def get_absolute_url(self):
         return ''
+    
+class VideoTag(models.Model):
+    tag = models.CharField(max_length=20)
+    videos = models.ManyToManyField(Video)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.tag
+
     

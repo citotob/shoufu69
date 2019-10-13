@@ -63,7 +63,7 @@ class StoryComment(models.Model):
     sid = models.ForeignKey(Story, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(_('Comment'),blank=True)
-    addtime = models.BigIntegerField(_('Addtime'),default=0)
+    addtime = models.DateTimeField(_('Add Time'),auto_now_add=True)
     STATUS_ = (
         ('0','0'),
         ('1','1')
