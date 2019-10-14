@@ -55,7 +55,6 @@ urlpatterns = [
 
     path('create-story/', create_story, name='create-story'),
     path('stories/', stories, name='stories'),
-<<<<<<< Updated upstream
     path('stories/<int:pk>/read', story_page, name='story-detail'),
     path('stories/category/<slug>', story_category, name='story-category'),
     path('mystories/', mystories, name='mystories'),
@@ -65,14 +64,6 @@ urlpatterns = [
     path('albums/category/<slug>', album_category, name='album-category'),
     path('albums/tag/<int:pk>', album_tag, name='album-tag'),
     path('myphotos/', myalbums, name='myalbums'),
-=======
-    path('stories/(?P<pk>[0-9]+)/read', story_page, name='story-detail'),
-
-    path('albums/', albums, name='albums'),
-    path('albums/(?P<aid>[0-9]+)/show', album_photo, name='album-photo'),
-
-    path('videos/(?P<pk>[0-9]+)/play', video_page, name='video-page'),
->>>>>>> Stashed changes
 
     path('messages/', include('django_messages.urls')),
 
