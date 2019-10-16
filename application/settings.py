@@ -73,6 +73,7 @@ INSTALLED_APPS = (
     'notices',
     'defang',
     'accounts',
+    #'urlcrypt',
     #'session_security',
 )
 
@@ -90,7 +91,10 @@ SITE_ID = 1
 #    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 #)
 MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    ####
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,6 +121,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 'django_messages.context_processors.inbox',
+                
             ],
         },
     },
@@ -125,6 +130,7 @@ TEMPLATES = [
 #SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 #SESSION_SECURITY_EXPIRE_AFTER=10
 #SESSION_SECURITY_WARN_AFTER=5
+#DEFAULT_FILE_STORAGE = 'videos.utils.storage.ASCIIFileSystemStorage'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 300 # set just 10 seconds to test
@@ -158,8 +164,9 @@ DATABASES = {
         'PASSWORD': config.get('database', 'PASSWORD'),
         'HOST': config.get('database', 'HOST'),
         'PORT': config.get('database', 'PORT'),
-        'OPTIONS': {'charset': 'utf8mb4' },
-        'use_unicode' : True,
+        'OPTIONS': {'charset': 'utf8mb4',
+                    'use_unicode' : True,
+                    },
     }
 }
 
@@ -168,15 +175,18 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    #'urlcrypt.auth_backends.UrlCryptBackend',
 )
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -184,6 +194,35 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+   ('en', 'English'),
+   ('zh-hans', 'Simplified Chinese'),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+'''
+LOCALES = (
+    #English
+    ('en', u'English'),
+
+    #Norwegian
+    ('no', u'Norsk'),
+
+    #Finish
+    ('fi', u'Suomi'),
+
+    #Simplified Chinese
+    ('zh-hans', u'简体中文'),
+
+    #Traditional Chinese
+    ('zh-hant', u'繁體中文'),
+
+    #Japanese
+    ('ja', u'日本語'),
+)
+'''
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

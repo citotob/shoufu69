@@ -97,10 +97,10 @@ class Photo(models.Model):
         return ''
 
 class PhotoComment(models.Model):
-    pid = models.ForeignKey(Album, on_delete=models.CASCADE)
+    pid = models.ForeignKey(Photo, on_delete=models.CASCADE)
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(_('Comment'),blank=True)
-    addtime = models.DateTimeField(_('Add Time'),auto_now_add=True)
+    addtime = models.BigIntegerField(_('Addtime'),default=0)
     STATUS_ = (
         ('0','Suspended'),
         ('1','Active')
@@ -180,12 +180,3 @@ class PhotoRatingIp(models.Model):
 
     def get_absolute_url(self):
         return ''
-
-
-class AlbumTag(models.Model):
-    tag = models.CharField(max_length=20)
-    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    albums = models.ManyToManyField(Album)
-    
-    def __str__(self):
-        return self.tag

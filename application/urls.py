@@ -1,11 +1,13 @@
 #from django.conf.urls import include, url
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.contrib import admin
 from jet.dashboard.dashboard_modules import google_analytics_views
 from django.conf import settings
 from django.conf.urls.static import static
 from defang import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.utils.http import urlencode
+
 from albums.views import upload_picture, albums, album_photo, myalbums, album_category, album_tag
 from stories.views import create_story, stories, mystories, story_page, , story_category
 from videos.views import myvideos, video_page, videolikes, videodislikes, videodelete, videoedit,  video_category, video_channel, video_tag
@@ -17,7 +19,9 @@ admin.autodiscover()
 
 urlpatterns = [
     #path('videos/', include('videos.urls', 'videos')),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', views.home, name='home'),
+    #path('', include('urlcrypt.urls')),
     
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
@@ -55,23 +59,25 @@ urlpatterns = [
 
     path('create-story/', create_story, name='create-story'),
     path('stories/', stories, name='stories'),
-    path('stories/<int:pk>/read', story_page, name='story-detail'),
+    path('stories/(?P<slug:pk>[0-9]+)/read', story_page, name='story-detail'),
     path('stories/category/<slug>', story_category, name='story-category'),
-    path('mystories/', mystories, name='mystories'),
-
+    
     path('albums/', albums, name='albums'),
-    path('albums/<int:aid>/show', album_photo, name='album-photo'),
+    path('albums/(?P<aid>[0-9]+)/show', album_photo, name='album-photo'),
     path('albums/category/<slug>', album_category, name='album-category'),
     path('albums/tag/<int:pk>', album_tag, name='album-tag'),
-    path('myphotos/', myalbums, name='myalbums'),
 
-    path('messages/', include('django_messages.urls')),
-
-    path('videos/<int:pk>/play', video_page, name='video-page'),
-    path('myvideos/', myvideos, name='myvideos'),
+    path('videos/(?P<pk>[0-9]+)/play', video_page, name='video-page'),
     path('videos/category/<slug>', video_category, name='video-category'),
     path('videos/channel/<int:pk>', video_channel, name='video-channel'),
     path('videos/tag/<int:pk>', video_tag, name='video-tag'),
+    
+
+    path('messages/', include('django_messages.urls')),
+
+    path('myvideos/', myvideos, name='myvideos'),
+    path('myphotos/', myalbums, name='myalbums'),
+    path('mystories/', mystories, name='mystories'),
 
     path('videolikes/', videolikes, name='videolikes'),
     path('videodislikes/', videodislikes, name='videodislikes'),
@@ -79,9 +85,12 @@ urlpatterns = [
     path('videodelete/(?P<video_id>[0-9]+)/', videodelete, name='videodelete'),
     path('edit-video/(?P<video_id>[0-9]+)/', videoedit, name='videoedit'),
 
+    path('search/', views.search, name='search'),
+
 
 #] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ]
+
 # Add media and static files
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

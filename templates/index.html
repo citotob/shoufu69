@@ -51,7 +51,7 @@
                         </div>
                         <div class="video-card-body">
                             <div class="video-title">
-                                <a href="{% url 'video-page' vid.id %}">{{ vid.title }}</a>
+                                <a href="{% url 'video-page' vid.id %}">{% if vid.title1  %}{{ vid.title1 }}{%else%}{{ vid.title }}{% endif %}</a>
                             </div>
                             <div class="video-page text-success">
                                  <a class="text-success" href="{% url 'video-channel' vid.uid.id %}">{{ vid.uid }}</a>

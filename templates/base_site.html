@@ -9,11 +9,19 @@
    </button>
    <a class="navbar-brand mr-1" href="{% url 'home' %}"><img class="img-fluid" alt="" src="{{MEDIA_URL}}images/logo.png"></a>
    <!-- Navbar Search -->
-   <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-5 my-md-0 osahan-navbar-search">
+   <form method="post" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-5 my-md-0 osahan-navbar-search" action="{% url 'search' %}">
+      {% csrf_token %}
       <div class="input-group">
-         <input type="text" class="form-control" placeholder="Search for...">
+         <div class="form-group">
+            <select id="searchfor" name="searchfor" class="custom-select">
+                  <option value="video">Video</option>
+                  <option value="album">Album</option>
+                  <option value="story">Story</option>
+            </select>
+         </div>
+         <input id="search" name="search" type="text" class="form-control" placeholder="Search for..." required>
          <div class="input-group-append">
-            <button class="btn btn-light" type="button">
+            <button class="btn btn-light" type="submit">
             <i class="fas fa-search"></i> 
             </button>
          </div>

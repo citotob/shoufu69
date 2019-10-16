@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.core.paginator import Paginator
 from django.http import HttpResponse
+
 from stories.forms import StoryForm
 from .models import StoryCategory, Story, StoryComment
 from datetime import datetime
-from django.core.paginator import Paginator
+
 import random
 
-def stories(request):
-    stories = Story.objects.all().order_by('-adddate')
+def stories(request, searchfor=None, search=None):
+    if searchfor == 'story':
+        stories = Story.objects.filter(Q(category__name__icontains=search) | 
+                        Q(title__icontains=search) |
+                        Q(content__icontains=search)).order_by('-adddate')
+    else:
+        stories = Story.objects.all().order_by('-adddate')
     paginator = Paginator(stories, 20)
     page = request.GET.get('page')
     stories = paginator.get_page(page)
     story_cat = StoryCategory.objects.all()
+
     context = {'stories' : stories, 'time': datetime.now(), 'story_cat': story_cat}
     return render(request, 'stories.html', context)
 
@@ -27,12 +35,14 @@ def mystories(request):
         paginator = Paginator(stories, 20)
         page = request.GET.get('page')
         stories = paginator.get_page(page)
+        
         story_cat = StoryCategory.objects.all()
         context = {'stories' : stories, 'time': datetime.now(), 'title' : 'MyStories', 'story_cat': story_cat}
         return render(request, 'mystories.html', context)
     else:
         return redirect('/signin/?next=/create-story/')
 
+#@login_required(login_url='signin')
 def story_page(request, pk):
     story = get_object_or_404(Story, pk=pk)
     title = story.title
@@ -54,16 +64,6 @@ def story_page(request, pk):
 
     context = { 'story': story , 'story_cat' : story_cat, 'random_story' : random_story, 'title' : title }
     return render(request, 'story-page.html', context)    
-
-def story_category(request, slug):
-    stories = get_list_or_404(Story.objects.order_by('-adddate'), category__slug=slug)
-    category = StoryCategory.objects.get(slug=slug)
-
-    archive_title = 'Story Category : ' + category.name 
-    story_cat = StoryCategory.objects.all()
-
-    context = {'stories' : stories, 'archive_title': archive_title, 'story_cat' :  story_cat}
-    return render(request, 'story-archive.html', context)
 
 @login_required(login_url='signin')
 def create_story(request):
@@ -91,4 +91,14 @@ def create_story(request):
         return render(request,'create-story.html',context)
     #else:
     #    return redirect('/signin/?next=/create-story/')
+
+def story_category(request, slug):
+    stories = get_list_or_404(Story.objects.order_by('-adddate'), category__slug=slug)
+    category = StoryCategory.objects.get(slug=slug)
+
+    archive_title = 'Story Category : ' + category.name 
+    story_cat = StoryCategory.objects.all()
+
+    context = {'stories' : stories, 'archive_title': archive_title, 'story_cat' :  story_cat}
+    return render(request, 'story-archive.html', context)
 

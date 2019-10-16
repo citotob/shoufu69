@@ -17,71 +17,8 @@ def myalbums(request):
     #if request.user.is_authenticated:
     with connection.cursor() as cursor:
         cursor.execute("select DISTINCT a.id, a.name, a.total_views, c.`name` category , MIN(b.image) image, " +
-            "count(a.id) totalphoto, a.adddate adddate, c.`slug` category from albums_album a, albums_photo b, albums_albumcategory c " +
+            "count(a.id) totalphoto, a.adddate adddate from albums_album a, albums_photo b, albums_albumcategory c " +
             "where a.id = b.aid_id and a.category_id = c.id and a.uid_id = "+str(request.user.id)+" group by a.id")
-        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto, a.adddate, c.`slug` category from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
-        row = cursor.fetchall()
-
-    albums = row
-    paginator = Paginator(albums, 2)
-    page = request.GET.get('page')
-    albums = paginator.get_page(page)
-    title = "MyAlbums"
-    albums_cat = AlbumCategory.objects.all()
-    context = {'albums' : albums, 'time': datetime.now(), 'title' : title, 'albums_cat' :  albums_cat}
-    return render(request, 'myalbums.html', context)
-    #else:
-    #    return redirect('/signin/?next=/create-story/')
-
-def album_photo(request, aid):
-
-    photos = get_list_or_404(Photo, aid=aid)
-    album = get_object_or_404(Album, pk=aid)
-    title = album.name
-    albums_cat = AlbumCategory.objects.all()
-    
-    album_item = Album.objects.all()
-    len_album = len(album_item)
-    if len_album > 4 :
-        random_album =  random.sample(list(album_item), 5)
-    else :
-        random_album =  random.sample(list(album_item), len_album)
-    
-    context = {'photos': photos, 'album' : album, 'albums_cat' : albums_cat, 'random_album' : random_album, 'title' : title}
-
-    if request.method == 'POST':
-        user_id = request.user
-        comment_post = request.POST['comment']
-        comment = PhotoComment(pid=album, uid=user_id, comment=comment_post)
-        comment.save()
-        return redirect(reverse('album-photo', args=[aid]))
-    return render(request, 'album-photo.html', context)
-
-def album_category(request, slug):
-    albums = get_list_or_404(Album.objects.order_by('-adddate'), category__slug=slug)
-    category = AlbumCategory.objects.get(slug=slug)
-
-    archive_title = 'Album Category : ' + category.name 
-    albums_cat = AlbumCategory.objects.all()
-
-    context = {'albums' : albums, 'archive_title':archive_title, 'albums_cat' :  albums_cat}
-    return render(request, 'album-archive.html', context)
-
-def album_tag(request, pk):
-    albums = get_list_or_404(Album.objects.order_by('-adddate'), albumtag__id=pk)
-    tag = AlbumTag.objects.get(pk=pk)
-
-    archive_title = 'Album Tag : ' + tag.tag 
-    albums_cat = AlbumCategory.objects.all()
-
-    context = {'albums' : albums, 'archive_title':archive_title, 'albums_cat' :  albums_cat}
-    return render(request, 'album-archive.html', context)
-
-def albums(request):
-    #albums = Album.objects.all().order_by('-adddate')
-    #albums = Album.objects.all().prefetch_related('id')
-    with connection.cursor() as cursor:
-        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
         row = cursor.fetchall()
 
     albums = row
@@ -92,6 +29,54 @@ def albums(request):
     albums_cat = AlbumCategory.objects.all()
     context = {'albums' : albums, 'time': datetime.now(), 'title' : title, 'albums_cat' :  albums_cat}
     return render(request, 'myalbums.html', context)
+    #else:
+    #    return redirect('/signin/?next=/create-story/')
+
+#@login_required(login_url='signin')
+def album_photo(request, aid):
+
+    photos = get_list_or_404(Photo, aid=aid)
+    album = get_object_or_404(Album, pk=aid)
+    title = album.name
+    albums_cat = AlbumCategory.objects.all()
+    
+
+    album_item = Album.objects.all()
+    len_album = len(album_item)
+    if len_album > 4 :
+        random_album =  random.sample(list(album_item), 5)
+    else :
+        random_album =  random.sample(list(album_item), len_album)
+
+    context = {'photos': photos, 'album' : album, 'albums_cat' : albums_cat, 'random_album' : random_album, 'title' : title}
+    
+    if request.method == 'POST':
+        user_id = request.user
+        comment_post = request.POST['comment']
+        comment = PhotoComment(pid=album, uid=user_id, comment=comment_post)
+        comment.save()
+        return redirect(reverse('album-photo', args=[aid]))
+    return render(request, 'album-photo.html', context)
+
+def albums(request, searchfor=None, search=None):
+    if searchfor == 'album':
+        with connection.cursor() as cursor:
+            cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), " +
+            "count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c " +
+            "where a.id = b.aid_id and a.category_id = c.id and (LOWER(c.name) REGEXP '" + search.lower() +"' " +
+            "or LOWER(a.`name`) REGEXP '"+search.lower()+"' or LOWER(a.tags) REGEXP '"+search.lower()+"')  group by a.id")
+            row = cursor.fetchall()
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
+            row = cursor.fetchall()
+
+    albums = row
+    paginator = Paginator(albums, 20)
+    page = request.GET.get('page')
+    albums = paginator.get_page(page)
+    context = {'albums' : albums, 'time': datetime.now()}
+    return render(request, 'albums.html', context)
 
 @login_required(login_url='signin')
 def upload_picture(request):
@@ -104,7 +89,8 @@ def upload_picture(request):
         name = request.POST['name']
         tags = request.POST['tags']
         category = request.POST['category']
-        cat = AlbumCategory.objects.get(id=category)
+        #cat = AlbumCategory.objects.get(id=category)
+        cat = get_object_or_404(AlbumCategory, pk=category)
         
         create_album = Album(uid=user_id, name=name, tags=tags, category=cat)
         create_album.save()
@@ -135,7 +121,7 @@ def upload_picture(request):
                 create_tag = AlbumTag(uid=user_id, tag=tg)
                 create_tag.save()
                 create_tag.albums.add(create_album)
-
+        
         ac_list = AlbumCategory.objects.all()
         context = {'ac_list' : ac_list}
 
@@ -148,3 +134,23 @@ def upload_picture(request):
         return render(request, 'upload-picture.html', context)
     #else:
     #    return redirect('/signin/?next=/upload/')
+
+def album_category(request, slug):
+    albums = get_list_or_404(Album.objects.order_by('-adddate'), category__slug=slug)
+    category = AlbumCategory.objects.get(slug=slug)
+
+    archive_title = 'Album Category : ' + category.name 
+    albums_cat = AlbumCategory.objects.all()
+
+    context = {'albums' : albums, 'archive_title':archive_title, 'albums_cat' :  albums_cat}
+    return render(request, 'album-archive.html', context)
+
+def album_tag(request, pk):
+    albums = get_list_or_404(Album.objects.order_by('-adddate'), albumtag__id=pk)
+    tag = AlbumTag.objects.get(pk=pk)
+
+    archive_title = 'Album Tag : ' + tag.tag 
+    albums_cat = AlbumCategory.objects.all()
+
+    context = {'albums' : albums, 'archive_title':archive_title, 'albums_cat' :  albums_cat}
+    return render(request, 'album-archive.html', context)

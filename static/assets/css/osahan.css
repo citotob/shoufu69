@@ -5,19 +5,19 @@ Author URI: https://themeforest.net/user/askbootstrap
 Version: 1.0
 */
 /*
-	-- Body 
-	-- Nav
-	-- Sidebar
-	-- Customize Bootstrap
-	-- Category Slider
-	-- Video Card
-	-- Channels Card
-	-- Upload Details
-	-- Watch History
-	-- Single Channel
+    -- Body 
+    -- Nav
+    -- Sidebar
+    -- Customize Bootstrap
+    -- Category Slider
+    -- Video Card
+    -- Channels Card
+    -- Upload Details
+    -- Watch History
+    -- Single Channel
     -- Video Page
     -- My Account
-	-- Footer
+    -- Footer
 */
 /* Body */
  html {
@@ -29,14 +29,15 @@ Version: 1.0
      color: #888;
      font-size: 13px;
      height: 100%;
+     /*font-family: 'Hiragino Kaku Gothic Pro', 'WenQuanYi Zen Hei', '微軟正黑體', '蘋果儷中黑', Helvetica, Arial, sans-serif;*/
+     font-family: '华文细黑', 'STXihei', 'PingFang TC', '微软雅黑体', 'Microsoft YaHei New', '微软雅黑', 'Microsoft Yahei', '宋体', 'SimSun', 'Helvetica Neue', 'Helvetica', Arial, sans-serif';
 }
-/* add new */
+/* add new button edit n delete in video*/
 div.buttonvideo {
     position: absolute;
     top: 0;
     right: 0;
 }
-
  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
 }
  #wrapper {
@@ -948,6 +949,16 @@ div.buttonvideo {
  .video-card-list:hover .video-card-body .right-action {
      opacity: unset;
 }
+
+.modal-share .modal-body a:hover {
+    color: #ff7f52!important;
+}
+.modal-share .modal-body a {
+    font-size: 24px;
+    padding-left: 10px;
+    color: white!important;
+}
+
 /* Channels Card */
  .channels-card {
      background: #1c1c1c none repeat scroll 0 0;
@@ -1261,7 +1272,6 @@ div.buttonvideo {
 .tag-info.list-inline a {
     color: #e6e6e6;
 }
-
 
 /* Mobile Media */
 /* Extra small devices (portrait phones, less than 576px) */

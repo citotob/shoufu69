@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from datetime import datetime
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import F
@@ -25,6 +25,9 @@ def myvideos(request):
     #if request.user.is_authenticated:
     vids = Video.objects.filter(uid=request.user).order_by('-adddate')
     #title = str(request.user).capitalize() + "'s Video(s)"
+    for vid in vids:
+        title_b = vid.title1.decode()
+        vid.title1 = title_b
     title = "MyVideos"
     paginator = Paginator(vids, 20)
     page = request.GET.get('page')
@@ -34,6 +37,7 @@ def myvideos(request):
     #else:
     #    return redirect('/signin/?next=/create-story/')
 
+#@login_required(login_url='signin')
 def video_page(request, pk):
     video = get_object_or_404(Video, pk=pk)
     video.viewnumber = video.viewnumber + 1
@@ -174,9 +178,9 @@ def videoedit(request, video_id):
     return render(request, 'edit-video.html', context)
 
 def get_upload_progress(request):
-  cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], request.GET['X-Progress-ID'])
-  data = cache.get(cache_key)
-  return HttpResponse(json.dumps(data))
+    cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], request.GET['X-Progress-ID'])
+    data = cache.get(cache_key)
+    return HttpResponse(json.dumps(data))
 
 def video_category(request, slug):
     vids = get_list_or_404(Video.objects.order_by('-adddate'), category__slug=slug)

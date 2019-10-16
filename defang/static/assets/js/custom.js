@@ -165,4 +165,19 @@ Version: 1.0
     }
   });
 
+  // Edit video size for portrait video
+  function resize_video_player(){
+    var vidplayer = $('#video-id');
+    var vidwd = $('#fluid_video_wrapper_video-id').width();
+    var vidhg = (vidwd / 16) * 9;
+    vidplayer.height(vidhg);
+
+    var fullscr = $('.fluid_video_wrapper.fluid_player_layout_default:-webkit-full-screen #video-id');
+    fullscr.height('100%');
+  }
+  resize_video_player();
+  $(window).resize(function(){
+    resize_video_player();
+  });
+
 })(jQuery); // End of use strict

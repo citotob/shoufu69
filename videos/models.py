@@ -11,6 +11,7 @@ import os
 
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from unidecode import unidecode
 
 # Create your models here.
 @python_2_unicode_compatible
@@ -32,12 +33,20 @@ class VideoCategory(models.Model):
     def get_absolute_url(self):
         return ''
 
+def get_upload_path(instance,filename):
+    path = "videos/"
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format(instance.pk, ext)
+    #return filename # Unicode error if filename has non latin 1 characters
+    return os.path.join(path, filename)
+
 @python_2_unicode_compatible
 class Video(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(VideoCategory, on_delete=models.CASCADE)
     video_id = models.IntegerField(_('Video ID'),default=0)
     title = models.CharField(_('Title'), max_length=191)
+    title1 = models.BinaryField(('Title'),default=0)
     description = models.TextField(_('description'),blank=True)
     featuredesc = models.TextField(_('featuredesc'), blank=True)
     keyword = models.TextField(_('keyword'),blank=True)
@@ -92,7 +101,8 @@ class Video(models.Model):
     dislikes = models.BigIntegerField(_('dislikes'),default=0)
     thumb = models.ImageField(_('Thumbnails'), upload_to='thumbnails/%Y/%m/%d', default = 'no-img.jpg')
     thumb_url = models.CharField(_('Thumb URL'),max_length=200, default='/')
-    videofile = models.FileField(upload_to='videos/%Y/%m/%d', null=True, verbose_name="")
+    #videofile = models.FileField(upload_to='videos/%Y/%m/%d', null=True, verbose_name="")
+    videofile = models.FileField(upload_to=get_upload_path, null=True, verbose_name="")
     tags =  models.TextField(_('Tags'), blank=True)
 
     def get_absolute_image_url(self):
@@ -103,8 +113,18 @@ class Video(models.Model):
         verbose_name_plural = 'Videos'
         #unique_together = ('name', 'state', 'county')
 
-    def __str__(self):
-        return self.title
+    #def __str__(self):
+    #    title = self.title1.decode()
+    #    #title = str(self.title)[2:-1].encode("ascii").decode().decode()
+    #    print(title)
+     #   return title
+    #def __str__(self):
+    #   return unicode(self).encode('utf-8')
+    #def __str__(self):
+    #    return u'Unicode string: \u5b54\u5b50'
+
+    def __unicode__(self):
+        return str(self.title1.decode())
 
     #def get_absolute_url(self):
     #    return ''    
@@ -214,5 +234,3 @@ class VideoTag(models.Model):
     
     def __str__(self):
         return self.tag
-
-    
