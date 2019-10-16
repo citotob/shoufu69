@@ -9,7 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.utils.http import urlencode
 
 from albums.views import upload_picture, albums, album_photo, myalbums, album_category, album_tag
-from stories.views import create_story, stories, mystories, story_page, , story_category
+from stories.views import create_story, stories, mystories, story_page, story_category
 from videos.views import myvideos, video_page, videolikes, videodislikes, videodelete, videoedit,  video_category, video_channel, video_tag
 
 from django.contrib.auth import views as auth_views

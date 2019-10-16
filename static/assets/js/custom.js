@@ -145,4 +145,39 @@ Version: 1.0
     gambar.attr('src', thumbDefault);
   });
 
+
+    //change active status on menu sidebar
+  function change_active_status(el) {
+    $('.sidebar .side-menu').removeClass("active");
+    $('.sidebar .side-menu.' + el ).addClass("active");
+  }
+
+  $(document).ready(function(){
+    var current_path = window.location.pathname;
+    var path_array = current_path.split('/');
+    if (current_path == '/' || path_array[1] == 'videos'){
+      change_active_status('video');
+    } else if (path_array[1] == 'stories'){
+      change_active_status('story');
+    } else if (path_array[1] == 'albums') {
+      change_active_status('photo');
+
+    }
+  });
+
+  // Edit video size for portrait video
+  function resize_video_player(){
+    var vidplayer = $('#video-id');
+    var vidwd = $('#fluid_video_wrapper_video-id').width();
+    var vidhg = (vidwd / 16) * 9;
+    vidplayer.height(vidhg);
+
+    var fullscr = $('.fluid_video_wrapper.fluid_player_layout_default:-webkit-full-screen #video-id');
+    fullscr.height('100%');
+  }
+  resize_video_player();
+  $(window).resize(function(){
+    resize_video_player();
+  });
+
 })(jQuery); // End of use strict

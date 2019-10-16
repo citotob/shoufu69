@@ -12,8 +12,9 @@ from django.core import serializers
 from django.conf import settings
 import json
 from django.core.cache import cache
+from django.urls import reverse
 
-from videos.models import Video, VideoCategory, VideoVoteUser
+from videos.models import Video, VideoCategory, VideoVoteUser, VideoComment
 import random
 from os.path import join as isfile
 import os

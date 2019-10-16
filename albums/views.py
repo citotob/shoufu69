@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
-from .models import Album, AlbumCategory, Photo, PhotoComment, AlbumTag
+from albums.models import Album, AlbumCategory, Photo, PhotoComment, AlbumTag
 from django.db import connection
 from django.core.paginator import Paginator
 from datetime import datetime
@@ -17,7 +17,7 @@ def myalbums(request):
     #if request.user.is_authenticated:
     with connection.cursor() as cursor:
         cursor.execute("select DISTINCT a.id, a.name, a.total_views, c.`name` category , MIN(b.image) image, " +
-            "count(a.id) totalphoto, a.adddate adddate from albums_album a, albums_photo b, albums_albumcategory c " +
+            "count(a.id) totalphoto, a.adddate adddate, c.`slug` slug from albums_album a, albums_photo b, albums_albumcategory c " +
             "where a.id = b.aid_id and a.category_id = c.id and a.uid_id = "+str(request.user.id)+" group by a.id")
         row = cursor.fetchall()
 
@@ -62,13 +62,13 @@ def albums(request, searchfor=None, search=None):
     if searchfor == 'album':
         with connection.cursor() as cursor:
             cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), " +
-            "count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c " +
+            "count(a.id) totalphoto, a.adddate, c.`slug` slug from albums_album a, albums_photo b, albums_albumcategory c " +
             "where a.id = b.aid_id and a.category_id = c.id and (LOWER(c.name) REGEXP '" + search.lower() +"' " +
             "or LOWER(a.`name`) REGEXP '"+search.lower()+"' or LOWER(a.tags) REGEXP '"+search.lower()+"')  group by a.id")
             row = cursor.fetchall()
     else:
         with connection.cursor() as cursor:
-            cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
+            cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto, a.adddate, c.`slug` slug from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
             row = cursor.fetchall()
 
     albums = row
