@@ -67,32 +67,23 @@
                 {% endfor %}
             </div>
 
-            <ul class="pagination justify-content-center mt-4 pagination-sm">
-                <li class="page-item">
-                   <span class="page-link">
+            <div class="pagination">
+                <span class="step-links">
                       {% if vids.has_previous %}
-                          <a href="?page=1">&laquo; first</a>
-                          <a href="?page={{ vids.previous_page_number }}">previous</a>
+                         <a href="?page=1">&laquo; first</a>
+                         <a href="?page={{ vids.previous_page_number }}">previous</a>
                       {% endif %}
-                   </span>
-                </li>
-
-                <li class="page-item">
-                   <span class="page-link">
-                   Page {{ vids.number }} of {{ vids.paginator.num_pages }}.
-                  
-                   </span>
-                </li>
-                  {% if vids.has_next %}
-                  <li class="page-item">
-                      <span class="page-link">
-                          <a href="?page={{ vids.next_page_number }}">next</a>
-                          <a href="?page={{ vids.paginator.num_pages }}">last &raquo;</a>
+             
+                      <span class="current">
+                         Page {{ vids.number }} of {{ vids.paginator.num_pages }}.
                       </span>
-                  </li>
-                  {% endif %}
-            </ul>
-
+             
+                      {% if vids.has_next %}
+                         <a href="?page={{ vids.next_page_number }}">next</a>
+                         <a href="?page={{ vids.paginator.num_pages }}">last &raquo;</a>
+                      {% endif %}
+                </span>
+            </div>
         </div>
 
         <hr>

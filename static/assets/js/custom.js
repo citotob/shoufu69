@@ -179,5 +179,8 @@ Version: 1.0
   $(window).resize(function(){
     resize_video_player();
   });
+  $(window).on('load', function() {
+    resize_video_player();
+  });
 
 })(jQuery); // End of use strict

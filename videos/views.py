@@ -13,6 +13,7 @@ from django.conf import settings
 import json
 from django.core.cache import cache
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 from videos.models import Video, VideoCategory, VideoVoteUser, VideoComment
 import random
@@ -26,9 +27,9 @@ def myvideos(request):
     #if request.user.is_authenticated:
     vids = Video.objects.filter(uid=request.user).order_by('-adddate')
     #title = str(request.user).capitalize() + "'s Video(s)"
-    for vid in vids:
-        title_b = vid.title1.decode()
-        vid.title1 = title_b
+    #for vid in vids:
+    #    title_b = vid.title1.decode()
+    #    vid.title1 = title_b
     title = "MyVideos"
     paginator = Paginator(vids, 20)
     page = request.GET.get('page')

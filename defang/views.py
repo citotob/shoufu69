@@ -40,9 +40,9 @@ def home(request, searchfor=None, search=None):
     else:
         vids = Video.objects.all().order_by('-adddate')
 
-    for vid in vids:
-        title_b = vid.title1.decode()
-        vid.title1 = title_b
+    #for vid in vids:
+    #    title_b = vid.title1.decode()
+    #    vid.title1 = title_b
     
     paginator = Paginator(vids, 20)
     page = request.GET.get('page')
@@ -160,19 +160,19 @@ def upload_video(request):
         #vid = Video(video_id=video_id, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile=video_file, thumb=img_output_path)
         #vid = Video(video_id=1, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile=video_file, thumb='img_output_path')
         
-        try:
-            vid = Video(video_id=1, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
-            vid.save()
-        except:
-            
-            title = request.POST['title'].encode('utf-8')
-            title1 = request.POST['title'].encode('utf-8')
-            desc = request.POST['description'].encode('utf-8')
-            tags = request.POST['tags'].encode('utf-8')
+        #try:
+        vid = Video(video_id=1, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
+        vid.save()
+        #except:
+        #    
+        #    title = request.POST['title'].encode('utf-8')
+        #    title1 = request.POST['title'].encode('utf-8')
+        #    desc = request.POST['description'].encode('utf-8')
+        #    tags = request.POST['tags'].encode('utf-8')
             #category = request.POST['category'].encode('utf-8')
 
-            vid = Video(video_id=1, uid=user_id, title=title, title1=title1, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
-            vid.save()
+        #    vid = Video(video_id=1, uid=user_id, title=title, title1=title1, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
+        #    vid.save()
         video_id = vid.id
         
         vid = Video.objects.get(id=video_id)

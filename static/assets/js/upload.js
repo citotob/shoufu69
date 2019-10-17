@@ -26,7 +26,7 @@ $(document).on('submit', '#uploadForm',function(e){
         data : formData,
         processData : false,
         contentType : false,
-        success : function() {
+        success : function(data) {
             alert('File uploaded!');
         },
         error : function(xhr,errmsg,err) {
