@@ -76,3 +76,45 @@
 </div>
 
 {% endblock content %}
+
+{% block extra_footer %}
+<script>
+$(document).on('submit', '#uploadForm',function(e){
+    e.preventDefault();
+
+    //var formData = new FormData($('uploadForm')[0]);
+    var formData = new FormData($(this)[0]);
+    $.ajax({
+        xhr : function() {
+            var xhr = new window.XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                    
+                    console.log('Bytes Loaded: ' + e.loaded);
+                    console.log('Total Size: ' + e.total);
+                    console.log('Percentage Uploaded: ' + (e.loaded / e.total))
+
+                    var percent = Math.round((e.loaded / e.total) * 100);
+
+                    $('#progressBar').attr('aria-valuenow', percent).css('width', percent + '%').text(percent + '%');
+                }
+            });
+
+            return xhr;
+        },
+        type:'POST',
+        url:'{% url "upload-video" %}',
+        data : formData,
+        processData : false,
+        contentType : false,
+        success : function(data) {
+            alert('File uploaded!');
+            $("#uploadForm")[0].reset();
+            $('#progressBar').attr('aria-valuenow', 0).css('width', 0 + '%').text(0 + '%');
+        }     
+    });
+    //return false;
+});
+</script>
+{% endblock extra_footer %}

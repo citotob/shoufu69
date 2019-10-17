@@ -130,8 +130,6 @@ def get_video_length(path):
 
 @login_required(login_url='signin')
 def upload_video(request):
-    #return render(request,'upload-video.html')
-    #if request.user.is_authenticated:
     if request.method == 'POST' and request.FILES['video_file']:
         video_file = request.FILES['video_file']
         
@@ -217,18 +215,20 @@ def upload_video(request):
                 create_tag = VideoTag(uid=user_id, tag=tg)
                 create_tag.save()
                 create_tag.videos.add(vid)
-
+        
         vc_list = VideoCategory.objects.all()
         context = {'vc_list' : vc_list}
-
-        return render(request, 'upload-video.html', context)
+        
+        #return render(request, 'upload-video.html', context)
+        #return redirect(reverse('upload-video'))
     else:
         vc_list = VideoCategory.objects.all()
         form = VideoForm()
         context = {'form' : form, 'vc_list' : vc_list}
-        return render(request, 'upload-video.html', context)
+        #return render(request, 'upload-video.html', context)
     #else:
     #    return redirect('/signin/?next=/upload/')
+    return render(request, 'upload-video.html', context)
 
 @login_required(login_url='signin')
 def upload_picture(request):
