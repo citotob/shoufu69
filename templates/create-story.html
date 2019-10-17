@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <form class="osahan-form" method="post" enctype="multipart/form-data">
+                <form id="uploadForm" class="osahan-form" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ story_form.media }}
                     <div class="row">
@@ -65,7 +65,6 @@
                     <div class="osahan-area text-right mt-3">
                         <button type="submit" class="btn btn-outline-primary">Create Story</button>
                     </div>
-
                 </form>
 
             </div>
@@ -76,3 +75,27 @@
 </div>
 
 {% endblock content %}
+
+{% block extra_footer %}
+<script>
+$(document).on('submit', '#uploadForm',function(e){
+    e.preventDefault();
+
+    //var formData = new FormData($('uploadForm')[0]);
+    var formData = new FormData($(this)[0]);
+    $.ajax({
+        
+        type:'POST',
+        url:'{% url "create-story" %}',
+        data : formData,
+        processData : false,
+        contentType : false,
+        success : function(data) {
+            alert('File uploaded!');
+            $("#uploadForm")[0].reset();
+        }     
+    });
+    //return false;
+});
+</script>
+{% endblock extra_footer %}

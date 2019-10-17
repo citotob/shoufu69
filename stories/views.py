@@ -97,6 +97,10 @@ def story_category(request, slug):
     stories = get_list_or_404(Story.objects.order_by('-adddate'), category__slug=slug)
     category = StoryCategory.objects.get(slug=slug)
 
+    paginator = Paginator(stories, 20)
+    page = request.GET.get('page')
+    stories = paginator.get_page(page)
+    
     archive_title = 'Story Category : ' + category.name 
     story_cat = StoryCategory.objects.all()
 

@@ -139,6 +139,10 @@ def album_category(request, slug):
     albums = get_list_or_404(Album.objects.order_by('-adddate'), category__slug=slug)
     category = AlbumCategory.objects.get(slug=slug)
 
+    paginator = Paginator(albums, 20)
+    page = request.GET.get('page')
+    albums = paginator.get_page(page)
+
     archive_title = 'Album Category : ' + category.name 
     albums_cat = AlbumCategory.objects.all()
 
@@ -148,6 +152,10 @@ def album_category(request, slug):
 def album_tag(request, pk):
     albums = get_list_or_404(Album.objects.order_by('-adddate'), albumtag__id=pk)
     tag = AlbumTag.objects.get(pk=pk)
+
+    paginator = Paginator(albums, 20)
+    page = request.GET.get('page')
+    albums = paginator.get_page(page)
 
     archive_title = 'Album Tag : ' + tag.tag 
     albums_cat = AlbumCategory.objects.all()

@@ -53,18 +53,18 @@
 
                <div class="pagination">
                   <span class="step-links">
-                        {% if stories.has_previous %}
+                        {% if albums.has_previous %}
                            <a href="?page=1">&laquo; first</a>
-                           <a href="?page={{ stories.previous_page_number }}">previous</a>
+                           <a href="?page={{ albums.previous_page_number }}">previous</a>
                         {% endif %}
                
                         <span class="current">
-                           Page {{ stories.number }} of {{ stories.paginator.num_pages }}.
+                           Page {{ albums.number }} of {{ albums.paginator.num_pages }}.
                         </span>
                
                         {% if stories.has_next %}
-                           <a href="?page={{ stories.next_page_number }}">next</a>
-                           <a href="?page={{ stories.paginator.num_pages }}">last &raquo;</a>
+                           <a href="?page={{ albums.next_page_number }}">next</a>
+                           <a href="?page={{ albums.paginator.num_pages }}">last &raquo;</a>
                         {% endif %}
                   </span>
                </div>

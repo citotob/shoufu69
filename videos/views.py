@@ -15,7 +15,7 @@ from django.core.cache import cache
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from videos.models import Video, VideoCategory, VideoVoteUser, VideoComment
+from videos.models import Video, VideoCategory, VideoVoteUser, VideoComment, VideoTag
 import random
 from os.path import join as isfile
 import os
@@ -188,6 +188,10 @@ def video_category(request, slug):
     vids = get_list_or_404(Video.objects.order_by('-adddate'), category__slug=slug)
     category = VideoCategory.objects.get(slug=slug)
 
+    paginator = Paginator(vids, 20)
+    page = request.GET.get('page')
+    vids = paginator.get_page(page)
+
     archive_title = 'Video Category : ' + category.name 
     context = {'vids' : vids, 'archive_title':archive_title}
     return render(request, 'video-archive.html', context)
@@ -196,12 +200,20 @@ def video_tag(request, pk):
     vids = get_list_or_404(Video.objects.order_by('-adddate'), videotag__id=pk)
     tag = VideoTag.objects.get(pk=pk)
 
+    paginator = Paginator(vids, 20)
+    page = request.GET.get('page')
+    vids = paginator.get_page(page)
+
     archive_title = 'Video Tag : ' + tag.tag 
     context = {'vids' : vids, 'archive_title':archive_title}
     return render(request, 'video-archive.html', context)
 
 def video_channel(request, pk):
     vids = get_list_or_404(Video.objects.order_by('-adddate'), uid=pk)
+    
+    paginator = Paginator(vids, 20)
+    page = request.GET.get('page')
+    vids = paginator.get_page(page)
     
     user = User.objects.get(pk=pk)
     archive_title = 'Video Channel : ' +  user.username
