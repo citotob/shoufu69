@@ -24,21 +24,14 @@ from .forms import VideoForm
 
 @login_required(login_url='signin')
 def myvideos(request):
-    #if request.user.is_authenticated:
     vids = Video.objects.filter(uid=request.user).order_by('-adddate')
-    #title = str(request.user).capitalize() + "'s Video(s)"
-    #for vid in vids:
-    #    title_b = vid.title1.decode()
-    #    vid.title1 = title_b
     title = "MyVideos"
     paginator = Paginator(vids, 20)
     page = request.GET.get('page')
     vids = paginator.get_page(page)
     context = {'vids' : vids, 'time': datetime.now(), 'title' : title}
     return render(request, 'myvideos.html', context)
-    #else:
-    #    return redirect('/signin/?next=/create-story/')
-
+    
 #@login_required(login_url='signin')
 def video_page(request, pk):
     video = get_object_or_404(Video, pk=pk)
@@ -52,8 +45,6 @@ def video_page(request, pk):
         random_video =  random.sample(list(video_item), 6)
     else :
         random_video =  random.sample(list(video_item), len_video)
-
-    #vid = Video.objects.get(video_id=video_id)
 
     blike = 0
     if request.user.is_authenticated:
@@ -91,7 +82,6 @@ def videolikes(request):
         vid = Video.objects.get(id=int(vid_id))
         likes = vid.likes
         if request.user.is_authenticated:
-            #likes = Video.objects.filter(pk=vid_id).update(likes=F('likes')+1)
             if vid:
                 vid_like = VideoVoteUser.objects.filter(vid_id=int(vid_id), uid_id = request.user, status='1')
                 

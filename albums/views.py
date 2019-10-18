@@ -125,15 +125,14 @@ def upload_picture(request):
         ac_list = AlbumCategory.objects.all()
         context = {'ac_list' : ac_list}
 
-        return render(request, 'upload-picture.html', context)
+        #return render(request, 'upload-picture.html', context)
     else:
 
         ac_list = AlbumCategory.objects.all()
         context = {'ac_list' : ac_list}
 
-        return render(request, 'upload-picture.html', context)
-    #else:
-    #    return redirect('/signin/?next=/upload/')
+        #return render(request, 'upload-picture.html', context)
+    return render(request, 'upload-picture.html', context)
 
 def album_category(request, slug):
     albums = get_list_or_404(Album.objects.order_by('-adddate'), category__slug=slug)

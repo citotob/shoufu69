@@ -69,52 +69,13 @@ def search(request):
         search=None
 
         return home(request, searchfor, search)
-    
-    '''
-    if request.method == 'POST':
-        searchfor=request.POST['searchfor']
-        search=request.POST['search']
-
-        if searchfor=='Video':
-
-            #vids = Video.objects.filter(Q(category__icontains=search) | 
-            #            Q(title__icontains=search) |
-            #            Q(description__icontains=search) |
-            #            Q(tags__icontains=search)).order_by('-adddate')
-        elif searchfor=='Album':
-            with connection.cursor() as cursor:
-        cursor.execute("select DISTINCT a.id, a.`name`, a.total_views, c.`name` category , MIN(b.image), count(a.id) totalphoto from albums_album a, albums_photo b, albums_albumcategory c where a.id = b.aid_id and a.category_id = c.id group by a.id")
-        row = cursor.fetchall()
-
-    albums = row
-        else:
-            vids = Video.objects.filter(Q(category__icontains=search) | 
-                        Q(title__icontains=search) |
-                        Q(description__icontains=search) |
-                        Q(tags__icontains=search)).order_by('-adddate')
-
-        vids = Video.objects.all().order_by('-adddate')
-        paginator = Paginator(vids, 20)
-        page = request.GET.get('page')
-        vids = paginator.get_page(page)
-
-        vids_popular = Video.objects.all().order_by('-viewnumber')[:8]
-
-        context = {'vids' : vids, 'vids_popular' : vids_popular}
-        return render(request, 'index.html', context)
-    '''
 
 def signin(request):
     return render(request, 'login.html')
 
 @login_required(login_url='signin')
 def upload(request):
-    #if request.user.is_authenticated:
     return render(request, 'upload.html')
-    #else:
-        #return render(request, 'index.html')
-    #    return redirect('/signin/?next=/upload/')
-    #return render(request,'upload.html')
 
 def get_video_length(path):
     clip = VideoFileClip(path)
@@ -133,21 +94,7 @@ def upload_video(request):
     if request.method == 'POST' and request.FILES['video_file']:
         video_file = request.FILES['video_file']
         
-        #fs = FileSystemStorage()
-        #filename = fs.save(video_file.name, video_file)
-        #uploaded_file_url = fs.url(filename)
-        #vid_file = '%s/%s' % (settings.MEDIA_ROOT, video_file.name)
-        
-        #subprocess.call(['ffmpeg', '-i', vid_file, '-ss', '00:00:00.000', '-vframes', '1', img_output_path])
-        
-        #video_id = Video.objects.count()
-        #video_id+=1
-        #img_output_path = '%s/thumbnails/%s_%s' % (settings.MEDIA_ROOT, video_file.name, video_id)
-        #img_output_path = '%s/thumbnails/%s' % (settings.MEDIA_ROOT, video_id)
-        #img_output_path_url = '%sthumbnails/%s' % (settings.MEDIA_URL, video_id)
-        #print(img_output_path_url)
         user_id = request.user
-        
         
         title = request.POST['title']
         desc = request.POST['description']
@@ -155,23 +102,9 @@ def upload_video(request):
         category = request.POST['category']
         
         cat = VideoCategory.objects.get(id=category)
-        #vid = Video(video_id=video_id, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile=video_file, thumb=img_output_path)
-        #vid = Video(video_id=1, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile=video_file, thumb='img_output_path')
-        
-        #try:
         vid = Video(video_id=1, uid=user_id, title=title, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
         vid.save()
-        #except:
-        #    
-        #    title = request.POST['title'].encode('utf-8')
-        #    title1 = request.POST['title'].encode('utf-8')
-        #    desc = request.POST['description'].encode('utf-8')
-        #    tags = request.POST['tags'].encode('utf-8')
-            #category = request.POST['category'].encode('utf-8')
-
-        #    vid = Video(video_id=1, uid=user_id, title=title, title1=title1, description=desc, tags=tags, category=cat,videofile='video_file', thumb='img_output_path')
-        #    vid.save()
-        video_id = vid.id
+        video_id = vid.pk
         
         vid = Video.objects.get(id=video_id)
         img_output_path = '%s/thumbnails/%s' % (settings.MEDIA_ROOT, video_id)
@@ -180,24 +113,11 @@ def upload_video(request):
         vid.videofile = video_file
         vid.save()
         
-        #vid = Video.objects.get(id=video_id)
-        #vid_id = Video.objects.get(id=vid.id)
-        #ff = FFmpeg(inputs={vid.videofile.path: None}, outputs={img_output_path+'_%d.jpg': ['-vframes', '20']})
-        #ff = FFmpeg(inputs={vid.videofile.path: None}, outputs={img_output_path+'_%d.jpg': ['-vf', 'fps=1/60', '-vframes', '20']})
         duration = get_video_length(vid.videofile.path)
         pertime = duration/20
-        #print(pertime)
         ff = FFmpeg(inputs={vid.videofile.path: None}, outputs={img_output_path+'_%d.jpg': ['-vf', 'fps=1/'+str(pertime), '-vframes', '20']})
-        #print(ff.cmd)
         ff.run()
         
-        #duration = get_video_length(vid.videofile.path)
-        #print(duration)
-        #video_path_url = '%s/%s' % (settings.MEDIA_ROOT, vid.videofile.path)
-        #print(vid.videofile.path)
-        #duration = getLength(vid.videofile.path)
-        #print(duration)
-
         vid.thumb = img_output_path + '_1.jpg'
         vid.thumb_url = img_output_path_url + '_1.jpg'
         vid.duration = duration
@@ -220,21 +140,13 @@ def upload_video(request):
         context = {'vc_list' : vc_list}
         
         #return render(request, 'upload-video.html', context)
-        #return redirect(reverse('upload-video'))
     else:
         vc_list = VideoCategory.objects.all()
         form = VideoForm()
         context = {'form' : form, 'vc_list' : vc_list}
         #return render(request, 'upload-video.html', context)
-    #else:
-    #    return redirect('/signin/?next=/upload/')
     return render(request, 'upload-video.html', context)
 
 @login_required(login_url='signin')
 def upload_picture(request):
-    #return render(request,'upload-picture.html')
-    #if request.user.is_authenticated:
     return render(request, 'upload-picture.html')
-    #else:
-    #    return redirect('/signin/?next=/upload/')
-    

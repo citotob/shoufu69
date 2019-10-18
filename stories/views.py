@@ -68,7 +68,6 @@ def story_page(request, pk):
 
 @login_required(login_url='signin')
 def create_story(request):
-    #if request.user.is_authenticated:
     if request.method == 'POST' and request.FILES['thumbnail']:
         user_id = request.user
         title = request.POST['title']
@@ -90,9 +89,7 @@ def create_story(request):
         context = {'story_form':story_form, 'sc_list' : sc_list}
 
         return render(request,'create-story.html',context)
-    #else:
-    #    return redirect('/signin/?next=/create-story/')
-
+    
 def story_category(request, slug):
     stories = get_list_or_404(Story.objects.order_by('-adddate'), category__slug=slug)
     category = StoryCategory.objects.get(slug=slug)
