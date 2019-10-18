@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .forms import UserUpdateForm
+from .forms import UserUpdateForm,  ProfileUpdateForm
 
 
 
@@ -31,17 +31,20 @@ class UpdateProfile(generic.UpdateView):
 def profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         #form.is_superuser =  False
         #form.is_staff = False
         #form.is_active = True
-        if form.is_valid() :
+        if form.is_valid and profile_form.is_valid :
             form.save()
+            profile_form.save()
             #print("Profile Succeed")
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
         #print("Profile Failed")
     else :
         form = UserUpdateForm(instance=request.user)
-    
-    context = {'form' : form}
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {'form' : form, 'profile_form' : profile_form}
     return render(request, 'profile.html', context)

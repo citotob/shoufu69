@@ -46,6 +46,18 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6 mt-3">
+                <div class="form-group">
+                    <label for="pic_1">Choose Your Profile Picture</label>         
+                </div>
+                <div class="form-group">
+                    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                                       
+                    <input type="file" name="image" accept="image/*" id="id_image">
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12 text-right">
                 <a href="{% url 'home' %}" class="btn btn-danger border-none"> Cancel </a>
                 <button type="submit" class="btn btn-success border-none"> Save Changes </button>

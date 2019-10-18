@@ -868,6 +868,13 @@ div.buttonvideo {
     object-fit: cover;
     object-position: 0% 20%;
 }
+
+.blog-page .col-xs-12 .card.blog img {
+    width: 100%;
+    object-fit: cover;
+    object-position: 50%;
+}
+
  .play-icon {
      opacity: 0;
      position: absolute;
@@ -1009,6 +1016,14 @@ div.buttonvideo {
  .channels-card-image-btn {
      margin: 3px 0 7px;
 }
+
+.account-img {
+    height: 80px;
+    width: 80px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+  
 /* Login Pages */
  .login-main-wrapper {
      background: #ff0000;

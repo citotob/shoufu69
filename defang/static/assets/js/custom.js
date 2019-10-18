@@ -104,16 +104,32 @@ Version: 1.0
     }
   })
 
-  // aspect ratio video thumbnail
+  // aspect ratio thumbnail
   function resize_thumbs(){
     var wd = $('.video-card-body').width();
     var hg = (wd / 16) * 9;
     $('.video-card-image img').height(hg)
   }
   
+  function resize_thumbs_sidebar(){
+    var wd = $('.sdb .video-card-image img').width();
+    var hg = (wd / 16) * 9;
+    $('.sdb .video-card-image, .sdb .video-card-image img').height(hg);
+  }
+
+  function resize_thumbs_blog(){
+    var wd = $('.blog-page .col-xs-12 .card.blog img').width();
+    var hg = (wd / 4) * 3;
+    $('.blog-page .col-xs-12 .card.blog img').height(hg);
+  }
+
   resize_thumbs();
+  resize_thumbs_sidebar();
+  resize_thumbs_blog();
   $(window).resize(function(){
     resize_thumbs();
+    resize_thumbs_sidebar();
+    resize_thumbs_blog();
   });
 
   // thumbnail animation
