@@ -112,7 +112,7 @@
 
                                 {% for comment in video.videocomment_set.all %}
                                     <div class="media mb-4">
-                                        <img alt="" src="/media/images/user.png" class="d-flex mr-3 rounded">
+                                        <img alt="" src="{{ comment.uid.profile.image.url }}" class="d-flex mr-3 rounded">
                                         <div class="media-body">
                                             <h5 class="mt-0"> {{ comment.uid }} <small> {{ comment.addtime | date:' b d, Y'| title}} </small></h5>
                                             <p>{{ comment.comment }}</p>

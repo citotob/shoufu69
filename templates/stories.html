@@ -74,36 +74,12 @@
 
                     <div class="card sidebar-card mb-4">
                         <div class="card-body">
-                            <div class="input-group">
-                                <input type="text" placeholder="Search For" class="form-control">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-secondary">Search <i class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card sidebar-card mb-4">
-                        <div class="card-body">
                            <h5 class="card-title mb-3">Categories</h5>
                            <ul class="sidebar-card-list">
                               {% for sc in story_cat %}
                                  <li><a href="#"><i class="fas fa-chevron-right"></i> {{ sc.name }} </a></li>
                               {% endfor %}
                            </ul>
-                        </div>
-                    </div>
-
-
-                    <div class="card sidebar-card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">Newsletter</h5>
-                            <div class="input-group">
-                                <input type="text" placeholder="Your email address" class="form-control">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-secondary">Sign up <i class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
