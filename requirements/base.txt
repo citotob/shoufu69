@@ -1,4 +1,4 @@
-Django==1.10.1
+Django==2.2.24
 docutils==0.12
 pytz==2015.4
 django-admin-sortable2==0.6.4
